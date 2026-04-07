@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+option csharp_namespace = "BankerDeskOps.Api.Protos";
+
+package banker_desk_ops;
+
+import "google/protobuf/empty.proto";
+
+// Loan status enumeration
+enum LoanStatus {
+  LOAN_STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  APPROVED = 2;
+  REJECTED = 3;
+  CLOSED = 4;
+}
+
+// Loan message
+message Loan {
+  string id = 1;
+  string customer_name = 2;
+  double amount = 3;
+  double interest_rate = 4;
+  int32 term_months = 5;
+  LoanStatus status = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+// Create loan request
+message CreateLoanRequest {
+  string customer_name = 1;
+  double amount = 2;
+  double interest_rate = 3;
+  int32 term_months = 4;
+}
+
+// Create loan response (returns the created loan)
+message CreateLoanResponse {
+  Loan loan = 1;
+}
+
+// Get all loans response
+message GetAllLoansResponse {
+  repeated Loan loans = 1;
+}
+
+// Get loan by ID request
+message GetLoanByIdRequest {
+  string id = 1;
+}
+
+// Get loan by ID response
+message GetLoanByIdResponse {
+  Loan loan = 1;
+}
+
+// Approve and reject requests
+message ApproveLoanRequest {
+  string id = 1;
+}
+
+message ApproveLoanResponse {
+  Loan loan = 1;
+}
+
+message RejectLoanRequest {
+  string id = 1;
+}
+
+message RejectLoanResponse {
+  Loan loan = 1;
+}
+
+// Delete loan request
+message DeleteLoanRequest {
+  string id = 1;
+}
+
+message DeleteLoanResponse {
+  bool success = 1;
+}
+
+// Loan Service
+service LoanService {
+  rpc GetAllLoans(google.protobuf.Empty) returns (GetAllLoansResponse);
+  rpc GetLoanById(GetLoanByIdRequest) returns (GetLoanByIdResponse);
+  rpc CreateLoan(CreateLoanRequest) returns (CreateLoanResponse);
+  rpc ApproveLoan(ApproveLoanRequest) returns (ApproveLoanResponse);
+  rpc RejectLoan(RejectLoanRequest) returns (RejectLoanResponse);
+  rpc DeleteLoan(DeleteLoanRequest) returns (DeleteLoanResponse);
+}

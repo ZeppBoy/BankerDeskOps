@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BankerDeskOps.Api/BankerDeskOps.Api.csproj" />
+    <Project Path="src/BankerDeskOps.Application/BankerDeskOps.Application.csproj" />
+    <Project Path="src/BankerDeskOps.Domain/BankerDeskOps.Domain.csproj" />
+    <Project Path="src/BankerDeskOps.Infrastructure/BankerDeskOps.Infrastructure.csproj" />
+    <Project Path="src/BankerDeskOps.Wpf/BankerDeskOps.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BankerDeskOps.Api.Tests/BankerDeskOps.Api.Tests.csproj" />
+    <Project Path="tests/BankerDeskOps.Application.Tests/BankerDeskOps.Application.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+option csharp_namespace = "BankerDeskOps.Api.Protos";
+
+package banker_desk_ops;
+
+import "google/protobuf/empty.proto";
+
+// Account type enumeration
+enum AccountType {
+  ACCOUNT_TYPE_UNSPECIFIED = 0;
+  CHECKING = 1;
+  SAVINGS = 2;
+}
+
+// Retail Account message
+message RetailAccount {
+  string id = 1;
+  string customer_name = 2;
+  string account_number = 3;
+  double balance = 4;
+  AccountType account_type = 5;
+  string opened_at = 6;
+  string updated_at = 7;
+}
+
+// Open account request
+message OpenAccountRequest {
+  string customer_name = 1;
+  AccountType account_type = 2;
+  double initial_deposit = 3;
+}
+
+// Open account response
+message OpenAccountResponse {
+  RetailAccount account = 1;
+}
+
+// Get all accounts response
+message GetAllAccountsResponse {
+  repeated RetailAccount accounts = 1;
+}
+
+// Get account by ID request
+message GetAccountByIdRequest {
+  string id = 1;
+}
+
+// Get account by ID response
+message GetAccountByIdResponse {
+  RetailAccount account = 1;
+}
+
+// Deposit request
+message DepositRequest {
+  string account_id = 1;
+  double amount = 2;
+}
+
+// Deposit response
+message DepositResponse {
+  RetailAccount account = 1;
+}
+
+// Withdraw request
+message WithdrawRequest {
+  string account_id = 1;
+  double amount = 2;
+}
+
+// Withdraw response
+message WithdrawResponse {
+  RetailAccount account = 1;
+}
+
+// Close account request
+message CloseAccountRequest {
+  string id = 1;
+}
+
+// Close account response
+message CloseAccountResponse {
+  bool success = 1;
+}
+
+// Retail Account Service
+service RetailAccountService {
+  rpc GetAllAccounts(google.protobuf.Empty) returns (GetAllAccountsResponse);
+  rpc GetAccountById(GetAccountByIdRequest) returns (GetAccountByIdResponse);
+  rpc OpenAccount(OpenAccountRequest) returns (OpenAccountResponse);
+  rpc Deposit(DepositRequest) returns (DepositResponse);
+  rpc Withdraw(WithdrawRequest) returns (WithdrawResponse);
+  rpc CloseAccount(CloseAccountRequest) returns (CloseAccountResponse);
+}

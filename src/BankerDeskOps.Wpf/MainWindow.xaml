@@ -1,0 +1,25 @@
+﻿<Window x:Class="BankerDeskOps.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BankerDeskOps.Wpf"
+        mc:Ignorable="d"
+        Title="BankerDeskOps - Banking Operations" Height="600" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Navigation Sidebar -->
+        <StackPanel Grid.Column="0" Background="#f0f0f0" Margin="10">
+            <TextBlock Text="Navigation" FontSize="16" FontWeight="Bold" Margin="0,0,0,20"/>
+            <Button Content="Loans" Height="40" Margin="0,5" Command="{Binding NavigateToLoansCommand}" Background="#007acc" Foreground="White"/>
+            <Button Content="Retail Accounts" Height="40" Margin="0,5" Command="{Binding NavigateToRetailAccountsCommand}" Background="#007acc" Foreground="White"/>
+        </StackPanel>
+
+        <!-- Content Area -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentView}"/>
+    </Grid>
+</Window>
