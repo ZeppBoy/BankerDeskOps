@@ -12,7 +12,7 @@ namespace BankerDeskOps.Wpf.ViewModels
     /// </summary>
     public partial class LoansViewModel : ObservableObject
     {
-        private readonly LoanApiService _loanApiService;
+        private readonly GrpcLoanApiService _loanApiService;
         private readonly ILogger<LoansViewModel> _logger;
 
         [ObservableProperty]
@@ -39,7 +39,7 @@ namespace BankerDeskOps.Wpf.ViewModels
         [ObservableProperty]
         private LoanDto? selectedLoan;
 
-        public LoansViewModel(LoanApiService loanApiService, ILogger<LoansViewModel> logger)
+        public LoansViewModel(GrpcLoanApiService loanApiService, ILogger<LoansViewModel> logger)
         {
             _loanApiService = loanApiService ?? throw new ArgumentNullException(nameof(loanApiService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

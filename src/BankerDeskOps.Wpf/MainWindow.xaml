@@ -4,8 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BankerDeskOps.Wpf"
+        xmlns:views="clr-namespace:BankerDeskOps.Wpf.Views"
+        xmlns:viewmodels="clr-namespace:BankerDeskOps.Wpf.ViewModels"
         mc:Ignorable="d"
         Title="BankerDeskOps - Banking Operations" Height="600" Width="1000">
+    <Window.Resources>
+        <!-- DataTemplate for LoansViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:LoansViewModel}">
+            <views:LoansView/>
+        </DataTemplate>
+        
+        <!-- DataTemplate for RetailAccountsViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:RetailAccountsViewModel}">
+            <views:RetailAccountsView/>
+        </DataTemplate>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>

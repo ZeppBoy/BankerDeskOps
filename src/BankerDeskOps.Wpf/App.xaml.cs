@@ -44,21 +44,12 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<GrpcChannelManager>(provider =>
             {
                 var logger = provider.GetRequiredService<ILogger<GrpcChannelManager>>();
-                return new GrpcChannelManager("https://localhost:7074", logger); // Update with your gRPC API URL
+                return new GrpcChannelManager("https://localhost:7003", logger); // Match the API's https profile port
             });
 
             // Add gRPC API services
             services.AddScoped<GrpcLoanApiService>();
             services.AddScoped<GrpcRetailAccountApiService>();
-
-            // Keep HTTP client and services for backward compatibility (optional)
-            services.AddHttpClient<ApiClient>(client =>
-            {
-                client.BaseAddress = new Uri("https://localhost:7074/");
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
-            });
-            services.AddScoped<LoanApiService>();
-            services.AddScoped<RetailAccountApiService>();
 
             // Add ViewModels
             services.AddSingleton<MainViewModel>();

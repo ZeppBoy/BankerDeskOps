@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +30,15 @@ namespace BankerDeskOps.Wpf.Services
                 if (_channel == null)
                 {
                     _logger.LogInformation("Creating new gRPC channel to {Address}", _address);
-                    _channel = GrpcChannel.ForAddress(_address);
+                    
+                    // For local development, allow unencrypted HTTP/2 and suppress certificate validation
+                    var handler = new HttpClientHandler();
+                    handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    
+                    _channel = GrpcChannel.ForAddress(_address, new GrpcChannelOptions
+                    {
+                        HttpHandler = handler
+                    });
                 }
                 return _channel;
             }

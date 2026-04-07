@@ -60,7 +60,7 @@ namespace BankerDeskOps.Wpf.Services
         /// <summary>
         /// Opens a new retail account.
         /// </summary>
-        public async Task<RetailAccountDto?> OpenAccountAsync(OpenAccountRequest request)
+        public async Task<RetailAccountDto?> OpenAccountAsync(CreateRetailAccountRequest request)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace BankerDeskOps.Wpf.Services
                 var protoRequest = new Api.Protos.OpenAccountRequest
                 {
                     CustomerName = request.CustomerName,
-                    AccountType = (AccountType)(int)request.AccountType,
+                    AccountType = (Api.Protos.AccountType)(int)request.AccountType,
                     InitialDeposit = (double)request.InitialDeposit
                 };
                 var response = await client.OpenAccountAsync(protoRequest);
