@@ -1,0 +1,116 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1>Loans Management</h1>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary" (click)="openModal()">+ New Loan</button>
+    </div>
+  </div>
+
+  <div *ngIf="error$ | async as error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading$ | async" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="table-responsive" *ngIf="!(loading$ | async)">
+    <table class="table table-striped" *ngIf="(loans$ | async) as loans">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Account ID</th>
+          <th>Amount</th>
+          <th>Term (Months)</th>
+          <th>Interest Rate (%)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let loan of loans">
+          <td>{{ loan.id | slice: 0:8 }}...</td>
+          <td>{{ loan.accountId | slice: 0:8 }}...</td>
+          <td>{{ loan.amount | currency }}</td>
+          <td>{{ loan.termMonths }}</td>
+          <td>{{ loan.interestRate }}%</td>
+          <td>
+            <span class="badge" [ngClass]="loan.status === 'Active' ? 'bg-success' : 'bg-warning'">
+              {{ loan.status }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="editLoan(loan)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteLoan(loan.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Loan Modal -->
+  <div *ngIf="showModal" class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0, 0, 0, 0.5);">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editingId ? 'Edit Loan' : 'New Loan' }}</h5>
+          <button type="button" class="btn-close" (click)="hideModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="customerName" class="form-label">Customer Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="customerName"
+                [(ngModel)]="formData.customerName"
+                name="customerName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount</label>
+              <input
+                type="number"
+                class="form-control"
+                id="amount"
+                [(ngModel)]="formData.amount"
+                name="amount"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="termMonths" class="form-label">Term (Months)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="termMonths"
+                [(ngModel)]="formData.termMonths"
+                name="termMonths"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="interestRate" class="form-label">Interest Rate (%)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="interestRate"
+                step="0.1"
+                [(ngModel)]="formData.interestRate"
+                name="interestRate"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="hideModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="saveLoan()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
