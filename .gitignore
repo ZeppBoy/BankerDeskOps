@@ -361,3 +361,20 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# ASP.NET Core - environment-specific settings (may contain secrets)
+appsettings.Development.json
+appsettings.Staging.json
+appsettings.Production.json
+
+# ASP.NET Core - user secrets
+secrets.json
+
+# Environment variable files
+.env
+.env.*
+!.env.example
+
+# Angular
+.angular/cache/
+dist/
+/src/BankerDeskOps.Web/.angular/cache/20.3.22/BankerDeskOps.Web
