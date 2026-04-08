@@ -7,6 +7,7 @@ import {
   CreateRetailAccountRequest,
   DepositRequest,
   WithdrawRequest,
+  AccountType,
 } from '../../core/models';
 
 @Component({
@@ -24,6 +25,8 @@ export class AccountsComponent implements OnInit {
   loading$ = this.accountService.loading$;
   error$ = this.accountService.error$;
 
+  AccountType = AccountType;
+
   editingId: string | null = null;
   selectedAccountId: string | null = null;
   transactionType: 'deposit' | 'withdraw' = 'deposit';
@@ -32,8 +35,9 @@ export class AccountsComponent implements OnInit {
   showTransactionModal = false;
 
   formData: CreateRetailAccountRequest = {
-    accountHolder: '',
-    initialBalance: 0,
+    customerName: '',
+    accountType: AccountType.Checking,
+    initialDeposit: 0,
   };
 
   transactionData: DepositRequest = {
@@ -74,15 +78,16 @@ export class AccountsComponent implements OnInit {
   editAccount(account: RetailAccountDto): void {
     this.editingId = account.id;
     this.formData = {
-      accountHolder: account.accountHolder,
-      initialBalance: account.balance,
+      customerName: account.customerName,
+      accountType: account.accountType,
+      initialDeposit: account.balance,
     };
     this.showAccountModal = true;
     document.body.style.overflow = 'hidden';
   }
 
   saveAccount(): void {
-    if (!this.formData.accountHolder || (this.formData.initialBalance && this.formData.initialBalance < 0)) {
+    if (!this.formData.customerName || (this.formData.initialDeposit != null && this.formData.initialDeposit < 0)) {
       alert('Please fill all required fields correctly');
       return;
     }
@@ -107,9 +112,9 @@ export class AccountsComponent implements OnInit {
   }
 
   deleteAccount(id: string): void {
-    if (confirm('Are you sure you want to delete this account?')) {
+    if (confirm('Are you sure you want to close this account?')) {
       this.accountService.deleteAccount(id).subscribe({
-        error: (err: any) => console.error('Error deleting account:', err),
+        error: (err: any) => console.error('Error closing account:', err),
       });
     }
   }
@@ -143,10 +148,15 @@ export class AccountsComponent implements OnInit {
     }
   }
 
+  getAccountTypeLabel(accountType: AccountType): string {
+    return AccountType[accountType] ?? 'Unknown';
+  }
+
   resetForm(): void {
     this.formData = {
-      accountHolder: '',
-      initialBalance: 0,
+      customerName: '',
+      accountType: AccountType.Checking,
+      initialDeposit: 0,
     };
   }
 }

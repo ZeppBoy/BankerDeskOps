@@ -23,7 +23,7 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Account ID</th>
+          <th>Customer Name</th>
           <th>Amount</th>
           <th>Term (Months)</th>
           <th>Interest Rate (%)</th>
@@ -34,17 +34,27 @@
       <tbody>
         <tr *ngFor="let loan of loans">
           <td>{{ loan.id | slice: 0:8 }}...</td>
-          <td>{{ loan.accountId | slice: 0:8 }}...</td>
+          <td>{{ loan.customerName }}</td>
           <td>{{ loan.amount | currency }}</td>
           <td>{{ loan.termMonths }}</td>
           <td>{{ loan.interestRate }}%</td>
           <td>
-            <span class="badge" [ngClass]="loan.status === 'Active' ? 'bg-success' : 'bg-warning'">
-              {{ loan.status }}
+            <span class="badge" [ngClass]="getLoanStatusClass(loan.status)">
+              {{ getLoanStatusLabel(loan.status) }}
             </span>
           </td>
           <td>
-            <button class="btn btn-sm btn-warning me-2" (click)="editLoan(loan)">Edit</button>
+            <button
+              *ngIf="loan.status === LoanStatus.Pending"
+              class="btn btn-sm btn-success me-1"
+              (click)="approveLoan(loan.id)"
+            >Approve</button>
+            <button
+              *ngIf="loan.status === LoanStatus.Pending"
+              class="btn btn-sm btn-danger me-1"
+              (click)="rejectLoan(loan.id)"
+            >Reject</button>
+            <button class="btn btn-sm btn-warning me-1" (click)="editLoan(loan)">Edit</button>
             <button class="btn btn-sm btn-danger" (click)="deleteLoan(loan.id)">Delete</button>
           </td>
         </tr>

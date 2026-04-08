@@ -39,43 +39,51 @@ export class ApiService {
     return this.http.delete<void>(`${this.apiUrl}/loans/${id}`);
   }
 
+  approveLoan(id: string): Observable<LoanDto> {
+    return this.http.put<LoanDto>(`${this.apiUrl}/loans/${id}/approve`, {});
+  }
+
+  rejectLoan(id: string): Observable<LoanDto> {
+    return this.http.put<LoanDto>(`${this.apiUrl}/loans/${id}/reject`, {});
+  }
+
   // Retail Account endpoints
   getAccounts(): Observable<RetailAccountDto[]> {
-    return this.http.get<RetailAccountDto[]>(`${this.apiUrl}/accounts`);
+    return this.http.get<RetailAccountDto[]>(`${this.apiUrl}/retailaccounts`);
   }
 
   getAccountById(id: string): Observable<RetailAccountDto> {
-    return this.http.get<RetailAccountDto>(`${this.apiUrl}/accounts/${id}`);
+    return this.http.get<RetailAccountDto>(`${this.apiUrl}/retailaccounts/${id}`);
   }
 
   createAccount(
     request: CreateRetailAccountRequest
   ): Observable<RetailAccountDto> {
-    return this.http.post<RetailAccountDto>(`${this.apiUrl}/accounts`, request);
+    return this.http.post<RetailAccountDto>(`${this.apiUrl}/retailaccounts`, request);
   }
 
   updateAccount(
     id: string,
     request: CreateRetailAccountRequest
   ): Observable<RetailAccountDto> {
-    return this.http.put<RetailAccountDto>(`${this.apiUrl}/accounts/${id}`, request);
+    return this.http.put<RetailAccountDto>(`${this.apiUrl}/retailaccounts/${id}`, request);
   }
 
   deleteAccount(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/accounts/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/retailaccounts/${id}`);
   }
 
   // Account transaction endpoints
   deposit(accountId: string, request: DepositRequest): Observable<RetailAccountDto> {
     return this.http.post<RetailAccountDto>(
-      `${this.apiUrl}/accounts/${accountId}/deposit`,
+      `${this.apiUrl}/retailaccounts/${accountId}/deposit`,
       request
     );
   }
 
   withdraw(accountId: string, request: WithdrawRequest): Observable<RetailAccountDto> {
     return this.http.post<RetailAccountDto>(
-      `${this.apiUrl}/accounts/${accountId}/withdraw`,
+      `${this.apiUrl}/retailaccounts/${accountId}/withdraw`,
       request
     );
   }

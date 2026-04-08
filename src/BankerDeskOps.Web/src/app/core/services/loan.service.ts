@@ -98,6 +98,52 @@ export class LoanService {
     );
   }
 
+  approveLoan(id: string): Observable<LoanDto> {
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
+
+    return this.apiService.approveLoan(id).pipe(
+      tap((updatedLoan) => {
+        const currentLoans = this.loansSubject.value;
+        const index = currentLoans.findIndex((l) => l.id === id);
+        if (index !== -1) {
+          currentLoans[index] = updatedLoan;
+          this.loansSubject.next([...currentLoans]);
+        }
+        this.loadingSubject.next(false);
+      }),
+      catchError((error) => {
+        this.errorSubject.next('Failed to approve loan');
+        this.loadingSubject.next(false);
+        console.error('Error approving loan:', error);
+        throw error;
+      })
+    );
+  }
+
+  rejectLoan(id: string): Observable<LoanDto> {
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
+
+    return this.apiService.rejectLoan(id).pipe(
+      tap((updatedLoan) => {
+        const currentLoans = this.loansSubject.value;
+        const index = currentLoans.findIndex((l) => l.id === id);
+        if (index !== -1) {
+          currentLoans[index] = updatedLoan;
+          this.loansSubject.next([...currentLoans]);
+        }
+        this.loadingSubject.next(false);
+      }),
+      catchError((error) => {
+        this.errorSubject.next('Failed to reject loan');
+        this.loadingSubject.next(false);
+        console.error('Error rejecting loan:', error);
+        throw error;
+      })
+    );
+  }
+
   getLoanById(id: string): Observable<LoanDto> {
     return this.apiService.getLoanById(id);
   }

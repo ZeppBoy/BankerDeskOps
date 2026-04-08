@@ -26,7 +26,7 @@
         </div>
         <div class="card-body">
           <p class="card-text">
-            <strong>Holder:</strong> {{ account.accountHolder }}
+            <strong>Customer:</strong> {{ account.customerName }}
           </p>
           <p class="card-text">
             <strong>Number:</strong> {{ account.accountNumber | slice: 0:8 }}...
@@ -35,30 +35,31 @@
             <strong>Balance:</strong> {{ account.balance | currency }}
           </p>
           <p class="card-text">
-            <strong>Status:</strong>
-            <span class="badge" [ngClass]="account.isActive ? 'bg-success' : 'bg-danger'">
-              {{ account.isActive ? 'Active' : 'Inactive' }}
-            </span>
+            <strong>Type:</strong>
+            <span class="badge bg-info text-dark ms-1">{{ getAccountTypeLabel(account.accountType) }}</span>
+          </p>
+          <p class="card-text">
+            <strong>Opened:</strong> {{ account.openedAt | date: 'shortDate' }}
           </p>
         </div>
         <div class="card-footer bg-light">
           <button
-            class="btn btn-sm btn-success me-2"
+            class="btn btn-sm btn-success me-1"
             (click)="openTransactionModal(account, 'deposit')"
           >
             Deposit
           </button>
           <button
-            class="btn btn-sm btn-warning me-2"
+            class="btn btn-sm btn-warning me-1"
             (click)="openTransactionModal(account, 'withdraw')"
           >
             Withdraw
           </button>
-          <button class="btn btn-sm btn-secondary me-2" (click)="editAccount(account)">
+          <button class="btn btn-sm btn-secondary me-1" (click)="editAccount(account)">
             Edit
           </button>
           <button class="btn btn-sm btn-danger" (click)="deleteAccount(account.id)">
-            Delete
+            Close
           </button>
         </div>
       </div>
@@ -76,23 +77,37 @@
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="accountHolder" class="form-label">Account Holder Name</label>
+              <label for="customerName" class="form-label">Customer Name</label>
               <input
                 type="text"
                 class="form-control"
-                id="accountHolder"
-                [(ngModel)]="formData.accountHolder"
-                name="accountHolder"
+                id="customerName"
+                [(ngModel)]="formData.customerName"
+                name="customerName"
               />
             </div>
             <div class="mb-3">
-              <label for="initialBalance" class="form-label">Initial Balance</label>
+              <label for="accountType" class="form-label">Account Type</label>
+              <select
+                class="form-select"
+                id="accountType"
+                [(ngModel)]="formData.accountType"
+                name="accountType"
+              >
+                <option [ngValue]="AccountType.Checking">Checking</option>
+                <option [ngValue]="AccountType.Savings">Savings</option>
+              </select>
+            </div>
+            <div class="mb-3" *ngIf="!editingId">
+              <label for="initialDeposit" class="form-label">Initial Deposit</label>
               <input
                 type="number"
                 class="form-control"
-                id="initialBalance"
-                [(ngModel)]="formData.initialBalance"
-                name="initialBalance"
+                id="initialDeposit"
+                [(ngModel)]="formData.initialDeposit"
+                name="initialDeposit"
+                min="0"
+                step="0.01"
               />
             </div>
           </form>

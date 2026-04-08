@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoanService } from '../../core/services/loan.service';
-import { LoanDto, CreateLoanRequest } from '../../core/models';
+import { LoanDto, CreateLoanRequest, LoanStatus } from '../../core/models';
 
 @Component({
   selector: 'app-loans',
@@ -17,6 +17,8 @@ export class LoansComponent implements OnInit {
   loans$ = this.loanService.loans$;
   loading$ = this.loanService.loading$;
   error$ = this.loanService.error$;
+
+  LoanStatus = LoanStatus;
 
   editingId: string | null = null;
   showModal = false;
@@ -48,7 +50,7 @@ export class LoansComponent implements OnInit {
   editLoan(loan: LoanDto): void {
     this.editingId = loan.id;
     this.formData = {
-      customerName: '',  // Backend doesn't provide customer name in LoanDto, set empty
+      customerName: loan.customerName,
       amount: loan.amount,
       termMonths: loan.termMonths,
       interestRate: loan.interestRate,
@@ -82,11 +84,41 @@ export class LoansComponent implements OnInit {
     }
   }
 
+  approveLoan(id: string): void {
+    if (confirm('Approve this loan?')) {
+      this.loanService.approveLoan(id).subscribe({
+        error: (err: any) => console.error('Error approving loan:', err),
+      });
+    }
+  }
+
+  rejectLoan(id: string): void {
+    if (confirm('Reject this loan?')) {
+      this.loanService.rejectLoan(id).subscribe({
+        error: (err: any) => console.error('Error rejecting loan:', err),
+      });
+    }
+  }
+
   deleteLoan(id: string): void {
     if (confirm('Are you sure you want to delete this loan?')) {
       this.loanService.deleteLoan(id).subscribe({
         error: (err: any) => console.error('Error deleting loan:', err),
       });
+    }
+  }
+
+  getLoanStatusLabel(status: LoanStatus): string {
+    return LoanStatus[status] ?? 'Unknown';
+  }
+
+  getLoanStatusClass(status: LoanStatus): string {
+    switch (status) {
+      case LoanStatus.Pending: return 'bg-warning text-dark';
+      case LoanStatus.Approved: return 'bg-success';
+      case LoanStatus.Rejected: return 'bg-danger';
+      case LoanStatus.Closed: return 'bg-secondary';
+      default: return 'bg-secondary';
     }
   }
 

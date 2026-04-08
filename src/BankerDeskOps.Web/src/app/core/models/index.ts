@@ -1,12 +1,26 @@
+// LoanStatus enum: 0=Pending, 1=Approved, 2=Rejected, 3=Closed
+export enum LoanStatus {
+  Pending = 0,
+  Approved = 1,
+  Rejected = 2,
+  Closed = 3,
+}
+
+// AccountType enum: 0=Checking, 1=Savings
+export enum AccountType {
+  Checking = 0,
+  Savings = 1,
+}
+
 export interface LoanDto {
   id: string;
-  accountId: string;
+  customerName: string;
   amount: number;
   interestRate: number;
   termMonths: number;
-  startDate: string;
-  endDate: string;
-  status: string;
+  status: LoanStatus;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateLoanRequest {
@@ -18,16 +32,18 @@ export interface CreateLoanRequest {
 
 export interface RetailAccountDto {
   id: string;
+  customerName: string;
   accountNumber: string;
-  accountHolder: string;
   balance: number;
-  createdDate: string;
-  isActive: boolean;
+  accountType: AccountType;
+  openedAt: string;
+  updatedAt: string;
 }
 
 export interface CreateRetailAccountRequest {
-  accountHolder: string;
-  initialBalance?: number;
+  customerName: string;
+  accountType: AccountType;
+  initialDeposit?: number;
 }
 
 export interface DepositRequest {
