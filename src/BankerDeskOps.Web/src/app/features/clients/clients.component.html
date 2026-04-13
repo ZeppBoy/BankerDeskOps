@@ -1,0 +1,128 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1>Bank Clients</h1>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary" (click)="openModal()">+ New Client</button>
+    </div>
+  </div>
+
+  <div *ngIf="error$ | async as error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading$ | async" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="table-responsive" *ngIf="!(loading$ | async)">
+    <table class="table table-striped" *ngIf="(clients$ | async) as clients">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>National ID</th>
+          <th>City</th>
+          <th>Country</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of clients">
+          <td>{{ client.firstName }} {{ client.lastName }}</td>
+          <td>{{ client.email }}</td>
+          <td>{{ client.phoneNumber }}</td>
+          <td>{{ client.nationalId }}</td>
+          <td>{{ client.city }}</td>
+          <td>{{ client.country }}</td>
+          <td>
+            <span class="badge" [ngClass]="getStatusClass(client.status)">
+              {{ getStatusLabel(client.status) }}
+            </span>
+          </td>
+          <td>
+            <button
+              *ngIf="client.status !== ClientStatus.Suspended"
+              class="btn btn-sm btn-warning me-1"
+              (click)="suspendClient(client.id)"
+            >Suspend</button>
+            <button
+              *ngIf="client.status !== ClientStatus.Active"
+              class="btn btn-sm btn-success me-1"
+              (click)="activateClient(client.id)"
+            >Activate</button>
+            <button class="btn btn-sm btn-info me-1 text-white" (click)="editClient(client)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteClient(client.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Client Modal -->
+  <div *ngIf="showModal" class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editingId ? 'Edit Client' : 'New Client' }}</h5>
+          <button type="button" class="btn-close" (click)="hideModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="formData.firstName" name="firstName" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="formData.lastName" name="lastName" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" [(ngModel)]="formData.email" name="email" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" [(ngModel)]="formData.phoneNumber" name="phoneNumber"/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" [(ngModel)]="formData.dateOfBirth" name="dateOfBirth" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">National ID <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [(ngModel)]="formData.nationalId" name="nationalId" required/>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Street</label>
+                <input type="text" class="form-control" [(ngModel)]="formData.street" name="street"/>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" [(ngModel)]="formData.city" name="city"/>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Postal Code</label>
+                <input type="text" class="form-control" [(ngModel)]="formData.postalCode" name="postalCode"/>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-control" [(ngModel)]="formData.country" name="country"/>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="hideModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="saveClient()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -28,6 +28,11 @@ namespace BankerDeskOps.Infrastructure.Data
         public DbSet<RetailAccount> RetailAccounts { get; set; } = null!;
 
         /// <summary>
+        /// DbSet for BankClient entities.
+        /// </summary>
+        public DbSet<BankClient> BankClients { get; set; } = null!;
+
+        /// <summary>
         /// Configures the model by applying entity configurations.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
@@ -38,6 +43,7 @@ namespace BankerDeskOps.Infrastructure.Data
             // Apply entity configurations
             modelBuilder.ApplyConfiguration(new LoanConfiguration());
             modelBuilder.ApplyConfiguration(new RetailAccountConfiguration());
+            modelBuilder.ApplyConfiguration(new BankClientConfiguration());
         }
     }
 }

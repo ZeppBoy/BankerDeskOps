@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+option csharp_namespace = "BankerDeskOps.Api.Protos";
+
+package banker_desk_ops;
+
+import "google/protobuf/empty.proto";
+
+// Matches Domain.Enums.ClientStatus values directly (0=Active, 1=Inactive, 2=Suspended)
+enum ClientStatus {
+  ACTIVE = 0;
+  INACTIVE = 1;
+  SUSPENDED = 2;
+}
+
+message BankClient {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  string phone_number = 5;
+  string date_of_birth = 6;
+  string national_id = 7;
+  string street = 8;
+  string city = 9;
+  string postal_code = 10;
+  string country = 11;
+  ClientStatus status = 12;
+  string created_at = 13;
+  string updated_at = 14;
+}
+
+message CreateBankClientRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string email = 3;
+  string phone_number = 4;
+  string date_of_birth = 5;
+  string national_id = 6;
+  string street = 7;
+  string city = 8;
+  string postal_code = 9;
+  string country = 10;
+}
+
+message UpdateBankClientRequest {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  string phone_number = 5;
+  string date_of_birth = 6;
+  string national_id = 7;
+  string street = 8;
+  string city = 9;
+  string postal_code = 10;
+  string country = 11;
+}
+
+message GetAllClientsResponse {
+  repeated BankClient clients = 1;
+}
+
+message GetClientByIdRequest {
+  string id = 1;
+}
+
+message GetClientByIdResponse {
+  BankClient client = 1;
+}
+
+message CreateBankClientResponse {
+  BankClient client = 1;
+}
+
+message UpdateBankClientResponse {
+  BankClient client = 1;
+}
+
+message SuspendClientRequest {
+  string id = 1;
+}
+
+message SuspendClientResponse {
+  BankClient client = 1;
+}
+
+message ActivateClientRequest {
+  string id = 1;
+}
+
+message ActivateClientResponse {
+  BankClient client = 1;
+}
+
+message DeleteClientRequest {
+  string id = 1;
+}
+
+message DeleteClientResponse {
+  bool success = 1;
+}
+
+service BankClientService {
+  rpc GetAllClients  (google.protobuf.Empty)    returns (GetAllClientsResponse);
+  rpc GetClientById  (GetClientByIdRequest)      returns (GetClientByIdResponse);
+  rpc CreateClient   (CreateBankClientRequest)   returns (CreateBankClientResponse);
+  rpc UpdateClient   (UpdateBankClientRequest)   returns (UpdateBankClientResponse);
+  rpc SuspendClient  (SuspendClientRequest)      returns (SuspendClientResponse);
+  rpc ActivateClient (ActivateClientRequest)     returns (ActivateClientResponse);
+  rpc DeleteClient   (DeleteClientRequest)       returns (DeleteClientResponse);
+}

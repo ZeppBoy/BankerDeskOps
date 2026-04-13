@@ -22,10 +22,12 @@ builder.Services.AddInfrastructure(connectionString);
 // Add application services
 builder.Services.AddScoped<ILoanService, LoanService>();
 builder.Services.AddScoped<IRetailAccountService, RetailAccountService>();
+builder.Services.AddScoped<IBankClientService, BankClientService>();
 
 // Add gRPC service implementations
 builder.Services.AddScoped<LoanServiceImpl>();
 builder.Services.AddScoped<RetailAccountServiceImpl>();
+builder.Services.AddScoped<BankClientServiceImpl>();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -75,6 +77,7 @@ app.UseAuthorization();
 // Map gRPC services
 app.MapGrpcService<LoanServiceImpl>();
 app.MapGrpcService<RetailAccountServiceImpl>();
+app.MapGrpcService<BankClientServiceImpl>();
 
 // Map REST controllers (kept for backward compatibility)
 app.MapControllers();

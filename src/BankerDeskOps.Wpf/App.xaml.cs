@@ -50,15 +50,18 @@ namespace BankerDeskOps.Wpf
             // Add gRPC API services
             services.AddScoped<GrpcLoanApiService>();
             services.AddScoped<GrpcRetailAccountApiService>();
+            services.AddScoped<GrpcBankClientApiService>();
 
             // Add ViewModels
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<LoansViewModel>();
             services.AddSingleton<RetailAccountsViewModel>();
+            services.AddSingleton<BankClientsViewModel>();
 
             // Add Views
             services.AddSingleton<LoansView>();
             services.AddSingleton<RetailAccountsView>();
+            services.AddSingleton<BankClientsView>();
             services.AddSingleton<MainWindow>();
 
             // Add logging

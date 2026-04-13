@@ -8,6 +8,9 @@ import {
   CreateRetailAccountRequest,
   DepositRequest,
   WithdrawRequest,
+  BankClientDto,
+  CreateBankClientRequest,
+  UpdateBankClientRequest,
 } from '../models';
 
 @Injectable({
@@ -86,5 +89,34 @@ export class ApiService {
       `${this.apiUrl}/retailaccounts/${accountId}/withdraw`,
       request
     );
+  }
+
+  // Bank Client endpoints
+  getClients(): Observable<BankClientDto[]> {
+    return this.http.get<BankClientDto[]>(`${this.apiUrl}/bankclients`);
+  }
+
+  getClientById(id: string): Observable<BankClientDto> {
+    return this.http.get<BankClientDto>(`${this.apiUrl}/bankclients/${id}`);
+  }
+
+  createClient(request: CreateBankClientRequest): Observable<BankClientDto> {
+    return this.http.post<BankClientDto>(`${this.apiUrl}/bankclients`, request);
+  }
+
+  updateClient(id: string, request: UpdateBankClientRequest): Observable<BankClientDto> {
+    return this.http.put<BankClientDto>(`${this.apiUrl}/bankclients/${id}`, request);
+  }
+
+  suspendClient(id: string): Observable<BankClientDto> {
+    return this.http.put<BankClientDto>(`${this.apiUrl}/bankclients/${id}/suspend`, {});
+  }
+
+  activateClient(id: string): Observable<BankClientDto> {
+    return this.http.put<BankClientDto>(`${this.apiUrl}/bankclients/${id}/activate`, {});
+  }
+
+  deleteClient(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/bankclients/${id}`);
   }
 }

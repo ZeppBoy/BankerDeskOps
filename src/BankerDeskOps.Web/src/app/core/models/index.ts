@@ -53,3 +53,54 @@ export interface DepositRequest {
 export interface WithdrawRequest {
   amount: number;
 }
+
+// ClientStatus enum: 0=Active, 1=Inactive, 2=Suspended
+export enum ClientStatus {
+  Active = 0,
+  Inactive = 1,
+  Suspended = 2,
+}
+
+export interface BankClientDto {
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  nationalId: string;
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  status: ClientStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBankClientRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  dateOfBirth: string;
+  nationalId: string;
+  street?: string;
+  city?: string;
+  postalCode?: string;
+  country?: string;
+}
+
+export interface UpdateBankClientRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  dateOfBirth: string;
+  nationalId: string;
+  street?: string;
+  city?: string;
+  postalCode?: string;
+  country?: string;
+}
