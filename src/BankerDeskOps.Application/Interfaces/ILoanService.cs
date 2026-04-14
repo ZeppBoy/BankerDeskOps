@@ -42,6 +42,17 @@ namespace BankerDeskOps.Application.Interfaces
         Task<LoanDto> RejectAsync(Guid id);
 
         /// <summary>
+        /// Disburses an approved loan — transitions status to <see cref="Domain.Enums.LoanStatus.Disbursed"/>
+        /// and atomically creates a <see cref="Domain.Entities.Contract"/> record.
+        /// </summary>
+        /// <param name="id">The ID of an <c>Approved</c> loan.</param>
+        /// <returns>The updated loan DTO with Disbursed status.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the loan is not found or is not in <c>Approved</c> status.
+        /// </exception>
+        Task<LoanDto> DisburseAsync(Guid id);
+
+        /// <summary>
         /// Deletes a loan.
         /// </summary>
         /// <param name="id">The loan ID to delete.</param>

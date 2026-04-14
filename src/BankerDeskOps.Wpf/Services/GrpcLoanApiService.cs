@@ -122,6 +122,26 @@ namespace BankerDeskOps.Wpf.Services
         }
 
         /// <summary>
+        /// Disburses an approved loan and triggers automatic contract creation.
+        /// </summary>
+        public async Task<LoanDto?> DisburseLoanAsync(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation("gRPC: Disbursing loan {LoanId}", id);
+                var client   = new LoanService.LoanServiceClient(_channelManager.Channel);
+                var response = await client.DisburseLoanAsync(
+                    new Api.Protos.DisburseLoanRequest { Id = id.ToString() });
+                return response.Loan != null ? MapProtoToDto((Api.Protos.Loan)response.Loan) : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("gRPC: Error disbursing loan {LoanId}: {Message}", id, ex.Message);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Deletes a loan.
         /// </summary>
         public async Task<bool> DeleteLoanAsync(Guid id)

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "BankerDeskOps.Api.Protos";
+
+package banker_desk_ops;
+
+import "google/protobuf/empty.proto";
+
+enum ContractStatus {
+  CONTRACT_STATUS_UNSPECIFIED = 0;
+  ACTIVE                      = 1;
+  COMPLETED                   = 2;
+  TERMINATED                  = 3;
+}
+
+message Contract {
+  string         id              = 1;
+  string         contract_number = 2;
+  string         loan_id         = 3;
+  string         customer_name   = 4;
+  double         loan_amount     = 5;
+  double         interest_rate   = 6;
+  int32          term_months     = 7;
+  string         disbursed_at    = 8;
+  ContractStatus status          = 9;
+  string         created_at      = 10;
+  string         updated_at      = 11;
+}
+
+message GetAllContractsResponse    { repeated Contract contracts = 1; }
+
+message GetContractByIdRequest     { string id = 1; }
+message GetContractByIdResponse    { Contract contract = 1; }
+
+message GetContractByLoanIdRequest  { string loan_id = 1; }
+message GetContractByLoanIdResponse { Contract contract = 1; }
+
+service ContractService {
+  rpc GetAllContracts     (google.protobuf.Empty)         returns (GetAllContractsResponse);
+  rpc GetContractById     (GetContractByIdRequest)        returns (GetContractByIdResponse);
+  rpc GetContractByLoanId (GetContractByLoanIdRequest)    returns (GetContractByLoanIdResponse);
+}

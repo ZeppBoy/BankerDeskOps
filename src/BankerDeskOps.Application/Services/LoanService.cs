@@ -11,10 +11,12 @@ namespace BankerDeskOps.Application.Services
     public class LoanService : ILoanService
     {
         private readonly ILoanRepository _loanRepository;
+        private readonly IContractRepository _contractRepository;
 
-        public LoanService(ILoanRepository loanRepository)
+        public LoanService(ILoanRepository loanRepository, IContractRepository contractRepository)
         {
-            _loanRepository = loanRepository ?? throw new ArgumentNullException(nameof(loanRepository));
+            _loanRepository     = loanRepository     ?? throw new ArgumentNullException(nameof(loanRepository));
+            _contractRepository = contractRepository  ?? throw new ArgumentNullException(nameof(contractRepository));
         }
 
         public async Task<IEnumerable<LoanDto>> GetAllAsync()
@@ -59,7 +61,11 @@ namespace BankerDeskOps.Application.Services
             if (loan is null)
                 throw new InvalidOperationException($"Loan with ID {id} not found.");
 
-            loan.Status = LoanStatus.Approved;
+            if (loan.Status != LoanStatus.Pending)
+                throw new InvalidOperationException(
+                    $"Only a Pending loan can be approved. Current status: {loan.Status}.");
+
+            loan.Status    = LoanStatus.Approved;
             loan.UpdatedAt = DateTime.UtcNow;
 
             var updatedLoan = await _loanRepository.UpdateAsync(loan);
@@ -72,10 +78,48 @@ namespace BankerDeskOps.Application.Services
             if (loan is null)
                 throw new InvalidOperationException($"Loan with ID {id} not found.");
 
-            loan.Status = LoanStatus.Rejected;
+            loan.Status    = LoanStatus.Rejected;
             loan.UpdatedAt = DateTime.UtcNow;
 
             var updatedLoan = await _loanRepository.UpdateAsync(loan);
+            return MapToDto(updatedLoan);
+        }
+
+        /// <inheritdoc />
+        public async Task<LoanDto> DisburseAsync(Guid id)
+        {
+            var loan = await _loanRepository.GetByIdAsync(id);
+            if (loan is null)
+                throw new InvalidOperationException($"Loan with ID {id} not found.");
+
+            if (loan.Status != LoanStatus.Approved)
+                throw new InvalidOperationException(
+                    $"Only an Approved loan can be disbursed. Current status: {loan.Status}.");
+
+            var disbursedAt = DateTime.UtcNow;
+
+            // 1. Transition loan status
+            loan.Status    = LoanStatus.Disbursed;
+            loan.UpdatedAt = disbursedAt;
+            var updatedLoan = await _loanRepository.UpdateAsync(loan);
+
+            // 2. Create contract — single entry point enforced in the service layer
+            var contract = new Contract
+            {
+                Id             = Guid.NewGuid(),
+                ContractNumber = GenerateContractNumber(),
+                LoanId         = loan.Id,
+                CustomerName   = loan.CustomerName,
+                LoanAmount     = loan.Amount,
+                InterestRate   = loan.InterestRate,
+                TermMonths     = loan.TermMonths,
+                DisbursedAt    = disbursedAt,
+                Status         = ContractStatus.Active,
+                CreatedAt      = disbursedAt,
+                UpdatedAt      = disbursedAt
+            };
+            await _contractRepository.CreateAsync(contract);
+
             return MapToDto(updatedLoan);
         }
 
@@ -84,19 +128,24 @@ namespace BankerDeskOps.Application.Services
             return await _loanRepository.DeleteAsync(id);
         }
 
-        private static LoanDto MapToDto(Loan loan)
+        // ── helpers ─────────────────────────────────────────────────────────────────
+
+        private static LoanDto MapToDto(Loan loan) => new()
         {
-            return new LoanDto
-            {
-                Id = loan.Id,
-                CustomerName = loan.CustomerName,
-                Amount = loan.Amount,
-                InterestRate = loan.InterestRate,
-                TermMonths = loan.TermMonths,
-                Status = loan.Status,
-                CreatedAt = loan.CreatedAt,
-                UpdatedAt = loan.UpdatedAt
-            };
-        }
+            Id           = loan.Id,
+            CustomerName = loan.CustomerName,
+            Amount       = loan.Amount,
+            InterestRate = loan.InterestRate,
+            TermMonths   = loan.TermMonths,
+            Status       = loan.Status,
+            CreatedAt    = loan.CreatedAt,
+            UpdatedAt    = loan.UpdatedAt
+        };
+
+        /// <summary>
+        /// Generates a human-readable, unique contract number: CNT-{YYYY}-{8 uppercase hex chars}.
+        /// </summary>
+        private static string GenerateContractNumber()
+            => $"CNT-{DateTime.UtcNow:yyyy}-{Guid.NewGuid().ToString("N")[..8].ToUpperInvariant()}";
     }
 }

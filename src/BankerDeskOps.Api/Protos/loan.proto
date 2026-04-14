@@ -6,13 +6,14 @@ package banker_desk_ops;
 
 import "google/protobuf/empty.proto";
 
-// Loan status enumeration
+// Loan status enumeration — values intentionally offset by 1 from C# enum (UNSPECIFIED = 0 placeholder)
 enum LoanStatus {
   LOAN_STATUS_UNSPECIFIED = 0;
-  PENDING = 1;
-  APPROVED = 2;
-  REJECTED = 3;
-  CLOSED = 4;
+  PENDING                 = 1;
+  APPROVED                = 2;
+  REJECTED                = 3;
+  CLOSED                  = 4;
+  DISBURSED               = 5;
 }
 
 // Loan message
@@ -72,6 +73,15 @@ message RejectLoanResponse {
   Loan loan = 1;
 }
 
+// Disburse loan (Approved → Disbursed + creates Contract)
+message DisburseLoanRequest {
+  string id = 1;
+}
+
+message DisburseLoanResponse {
+  Loan loan = 1;
+}
+
 // Delete loan request
 message DeleteLoanRequest {
   string id = 1;
@@ -88,5 +98,6 @@ service LoanService {
   rpc CreateLoan(CreateLoanRequest) returns (CreateLoanResponse);
   rpc ApproveLoan(ApproveLoanRequest) returns (ApproveLoanResponse);
   rpc RejectLoan(RejectLoanRequest) returns (RejectLoanResponse);
+  rpc DisburseLoan(DisburseLoanRequest) returns (DisburseLoanResponse);
   rpc DeleteLoan(DeleteLoanRequest) returns (DeleteLoanResponse);
 }

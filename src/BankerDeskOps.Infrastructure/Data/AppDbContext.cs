@@ -33,6 +33,11 @@ namespace BankerDeskOps.Infrastructure.Data
         public DbSet<BankClient> BankClients { get; set; } = null!;
 
         /// <summary>
+        /// DbSet for Contract entities. Created automatically on loan disbursement.
+        /// </summary>
+        public DbSet<Contract> Contracts { get; set; } = null!;
+
+        /// <summary>
         /// Configures the model by applying entity configurations.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
@@ -44,6 +49,7 @@ namespace BankerDeskOps.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new LoanConfiguration());
             modelBuilder.ApplyConfiguration(new RetailAccountConfiguration());
             modelBuilder.ApplyConfiguration(new BankClientConfiguration());
+            modelBuilder.ApplyConfiguration(new ContractConfiguration());
         }
     }
 }

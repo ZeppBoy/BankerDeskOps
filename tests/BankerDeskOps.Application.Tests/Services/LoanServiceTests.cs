@@ -11,12 +11,14 @@ namespace BankerDeskOps.Application.Tests.Services
     public class LoanServiceTests
     {
         private readonly ILoanRepository _mockRepository;
+        private readonly IContractRepository _mockContractRepository;
         private readonly LoanService _loanService;
 
         public LoanServiceTests()
         {
-            _mockRepository = Substitute.For<ILoanRepository>();
-            _loanService = new LoanService(_mockRepository);
+            _mockRepository         = Substitute.For<ILoanRepository>();
+            _mockContractRepository = Substitute.For<IContractRepository>();
+            _loanService            = new LoanService(_mockRepository, _mockContractRepository);
         }
 
         [Fact]
@@ -174,7 +176,7 @@ namespace BankerDeskOps.Application.Tests.Services
         {
             // Arrange
             var loanId = Guid.NewGuid();
-            _mockRepository.GetByIdAsync(loanId).Returns((Loan)null);
+            _mockRepository.GetByIdAsync(loanId).Returns(default(Loan));
 
             // Act & Assert
             await Assert.ThrowsAsync<InvalidOperationException>(() => _loanService.ApproveAsync(loanId));
@@ -250,6 +252,84 @@ namespace BankerDeskOps.Application.Tests.Services
             // Assert
             Assert.False(result);
             await _mockRepository.Received(1).DeleteAsync(loanId);
+        }
+
+        // ── DisburseAsync ────────────────────────────────────────────────────
+
+        [Fact]
+        public async Task DisburseAsync_WithApprovedLoan_ShouldSetDisbursedAndCreateContract()
+        {
+            // Arrange
+            var loanId = Guid.NewGuid();
+            var loan = new Loan
+            {
+                Id           = loanId,
+                CustomerName = "Jane Disbursed",
+                Amount       = 50000m,
+                InterestRate = 6.5m,
+                TermMonths   = 36,
+                Status       = LoanStatus.Approved
+            };
+            _mockRepository.GetByIdAsync(loanId).Returns(loan);
+            _mockRepository.UpdateAsync(Arg.Any<Loan>()).Returns(x => Task.FromResult(x.Arg<Loan>()));
+            _mockContractRepository.CreateAsync(Arg.Any<Contract>())
+                .Returns(x => Task.FromResult(x.Arg<Contract>()));
+
+            // Act
+            var result = await _loanService.DisburseAsync(loanId);
+
+            // Assert
+            Assert.Equal(LoanStatus.Disbursed, result.Status);
+            await _mockRepository.Received(1).UpdateAsync(
+                Arg.Is<Loan>(l => l.Status == LoanStatus.Disbursed));
+            await _mockContractRepository.Received(1).CreateAsync(
+                Arg.Is<Contract>(c =>
+                    c.LoanId       == loanId &&
+                    c.CustomerName == "Jane Disbursed" &&
+                    c.LoanAmount   == 50000m &&
+                    c.Status       == ContractStatus.Active &&
+                    c.ContractNumber.StartsWith("CNT-")));
+        }
+
+        [Fact]
+        public async Task DisburseAsync_WithPendingLoan_ShouldThrowInvalidOperationException()
+        {
+            // Arrange
+            var loanId = Guid.NewGuid();
+            var loan = new Loan { Id = loanId, Status = LoanStatus.Pending };
+            _mockRepository.GetByIdAsync(loanId).Returns(loan);
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _loanService.DisburseAsync(loanId));
+
+            Assert.Contains("Approved", ex.Message);
+            await _mockContractRepository.DidNotReceive().CreateAsync(Arg.Any<Contract>());
+        }
+
+        [Fact]
+        public async Task DisburseAsync_WithAlreadyDisbursedLoan_ShouldThrowInvalidOperationException()
+        {
+            // Arrange
+            var loanId = Guid.NewGuid();
+            var loan = new Loan { Id = loanId, Status = LoanStatus.Disbursed };
+            _mockRepository.GetByIdAsync(loanId).Returns(loan);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _loanService.DisburseAsync(loanId));
+            await _mockContractRepository.DidNotReceive().CreateAsync(Arg.Any<Contract>());
+        }
+
+        [Fact]
+        public async Task DisburseAsync_WithNonExistentLoan_ShouldThrowInvalidOperationException()
+        {
+            // Arrange
+            _mockRepository.GetByIdAsync(Arg.Any<Guid>()).Returns(default(Loan));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _loanService.DisburseAsync(Guid.NewGuid()));
         }
     }
 }

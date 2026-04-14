@@ -204,6 +204,54 @@ namespace BankerDeskOps.Wpf.ViewModels
         }
 
         /// <summary>
+        /// Disburses the selected loan and triggers automatic contract creation.
+        /// Only available for Approved loans.
+        /// </summary>
+        [RelayCommand]
+        public async Task DisburseLoan()
+        {
+            if (SelectedLoan == null)
+            {
+                ErrorMessage = "Please select an approved loan to disburse";
+                return;
+            }
+
+            if (SelectedLoan.Status != Domain.Enums.LoanStatus.Approved)
+            {
+                ErrorMessage = $"Only Approved loans can be disbursed. Current status: {SelectedLoan.Status}";
+                return;
+            }
+
+            try
+            {
+                IsLoading    = true;
+                ErrorMessage = null;
+                _logger.LogInformation("Disbursing loan {LoanId}", SelectedLoan.Id);
+
+                var updatedLoan = await _loanApiService.DisburseLoanAsync(SelectedLoan.Id);
+                if (updatedLoan != null)
+                {
+                    var index = Loans.IndexOf(SelectedLoan);
+                    if (index >= 0)
+                    {
+                        Loans[index] = updatedLoan;
+                        SelectedLoan = updatedLoan;
+                    }
+                    ErrorMessage = "Loan disbursed successfully. Contract has been created automatically.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error disbursing loan: {ex.Message}";
+                _logger.LogError("Failed to disburse loan {LoanId}: {Message}", SelectedLoan?.Id, ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        /// <summary>
         /// Deletes the selected loan.
         /// </summary>
         [RelayCommand]

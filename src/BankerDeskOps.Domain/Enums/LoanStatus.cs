@@ -23,6 +23,12 @@ namespace BankerDeskOps.Domain.Enums
         /// <summary>
         /// Loan has been closed.
         /// </summary>
-        Closed = 3
+        Closed = 3,
+
+        /// <summary>
+        /// Loan has been disbursed — funds paid out to the customer.
+        /// This is the terminal approval stage and triggers Contract creation.
+        /// </summary>
+        Disbursed = 4
     }
 }

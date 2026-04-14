@@ -149,6 +149,42 @@ namespace BankerDeskOps.Api.Controllers
         }
 
         /// <summary>
+        /// Disburses an approved loan and creates the associated contract.
+        /// Only loans in <c>Approved</c> status can be disbursed.
+        /// </summary>
+        /// <param name="id">The ID of an Approved loan.</param>
+        /// <returns>The updated loan with Disbursed status.</returns>
+        [HttpPut("{id}/disburse")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoanDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<LoanDto>> DisburseLoan(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation("Disbursing loan with ID: {LoanId}", id);
+                var updatedLoan = await _loanService.DisburseAsync(id);
+                return Ok(updatedLoan);
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("not found"))
+            {
+                _logger.LogWarning("Loan disbursal failed — not found: {Message}", ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Loan disbursal failed — invalid state: {Message}", ex.Message);
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error disbursing loan {LoanId}: {Message}", id, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred");
+            }
+        }
+
+        /// <summary>
         /// Deletes a loan.
         /// </summary>
         /// <param name="id">The loan ID to delete.</param>

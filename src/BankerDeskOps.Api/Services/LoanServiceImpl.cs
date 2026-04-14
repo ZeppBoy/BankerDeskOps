@@ -120,6 +120,25 @@ namespace BankerDeskOps.Api.Services
         }
 
         /// <summary>
+        /// Disburses an approved loan and creates the associated contract.
+        /// </summary>
+        public override async Task<DisburseLoanResponse> DisburseLoan(DisburseLoanRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation("gRPC: Disbursing loan with ID: {LoanId}", request.Id);
+
+            try
+            {
+                var updatedLoan = await _loanService.DisburseAsync(Guid.Parse(request.Id));
+                return new DisburseLoanResponse { Loan = MapLoanToProto(updatedLoan) };
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("gRPC: Loan disbursal failed: {Message}", ex.Message);
+                throw new RpcException(new Status(StatusCode.FailedPrecondition, ex.Message));
+            }
+        }
+
+        /// <summary>
         /// Deletes a loan.
         /// </summary>
         public override async Task<DeleteLoanResponse> DeleteLoan(DeleteLoanRequest request, ServerCallContext context)
