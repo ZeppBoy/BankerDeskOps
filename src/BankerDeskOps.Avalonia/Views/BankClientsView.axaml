@@ -1,0 +1,123 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:BankerDeskOps.Avalonia.Converters"
+             x:Class="BankerDeskOps.Avalonia.Views.BankClientsView">
+
+    <UserControl.Resources>
+        <converters:DateTimeToNullableDateTimeConverter x:Key="DateTimeConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="Bank Clients" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Create / Edit Form -->
+        <Border Grid.Row="1" Background="#f9f9f9" BorderBrush="#dee2e6" BorderThickness="1" Padding="10" Margin="0,0,0,8">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" MaxHeight="230">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Row 0: Name + Email -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="First Name:"  VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding FirstName}"  Margin="0,3,10,3" Padding="5"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Last Name:"   VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="0" Grid.Column="3" Text="{Binding LastName}"   Margin="0,3,10,3" Padding="5"/>
+
+                    <TextBlock Grid.Row="0" Grid.Column="4" Text="Email:"       VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="0" Grid.Column="5" Text="{Binding Email}"       Margin="0,3,0,3" Padding="5"/>
+
+                    <!-- Row 1: Phone + DOB + NationalId -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Phone:"       VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding PhoneNumber}" Margin="0,3,10,3" Padding="5"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="Date of Birth:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <!-- CalendarDatePicker expects DateTime? — converter handles non-nullable DateTime -->
+                    <CalendarDatePicker Grid.Row="1" Grid.Column="3"
+                                        SelectedDate="{Binding DateOfBirth, Converter={StaticResource DateTimeConverter}}"
+                                        Margin="0,3,10,3"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="4" Text="National ID:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="1" Grid.Column="5" Text="{Binding NationalId}"  Margin="0,3,0,3" Padding="5"/>
+
+                    <!-- Row 2: Address -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Street:"      VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="2" Grid.Column="1" Text="{Binding Street}"      Margin="0,3,10,3" Padding="5"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="City:"        VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="2" Grid.Column="3" Text="{Binding City}"        Margin="0,3,10,3" Padding="5"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="4" Text="Postal Code:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="2" Grid.Column="5" Text="{Binding PostalCode}"  Margin="0,3,0,3" Padding="5"/>
+
+                    <!-- Row 3: Country -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Country:"     VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Row="3" Grid.Column="1" Text="{Binding Country}"     Margin="0,3,10,3" Padding="5"/>
+                </Grid>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Create Client"    Command="{Binding CreateClientCommand}"
+                    Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Update Selected"  Command="{Binding UpdateClientCommand}"
+                    Height="35" Padding="15,5" Background="#007acc" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Suspend"          Command="{Binding SuspendClientCommand}"
+                    Height="35" Padding="15,5" Background="#fd7e14" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Activate"         Command="{Binding ActivateClientCommand}"
+                    Height="35" Padding="15,5" Background="#20c997" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Delete"           Command="{Binding DeleteClientCommand}"
+                    Height="35" Padding="15,5" Background="#dc3545" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Refresh"          Command="{Binding LoadClientsCommand}"
+                    Height="35" Padding="15,5" Background="#17a2b8" Foreground="White"/>
+        </StackPanel>
+
+        <!-- Clients DataGrid -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding Clients}"
+                  SelectedItem="{Binding SelectedClient}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name"  Binding="{Binding FirstName}"   Width="100"/>
+                <DataGridTextColumn Header="Last Name"   Binding="{Binding LastName}"    Width="100"/>
+                <DataGridTextColumn Header="Email"       Binding="{Binding Email}"       Width="200"/>
+                <DataGridTextColumn Header="Phone"       Binding="{Binding PhoneNumber}" Width="110"/>
+                <DataGridTextColumn Header="National ID" Binding="{Binding NationalId}"  Width="120"/>
+                <DataGridTextColumn Header="City"        Binding="{Binding City}"        Width="100"/>
+                <DataGridTextColumn Header="Country"     Binding="{Binding Country}"     Width="100"/>
+                <DataGridTextColumn Header="Status"      Binding="{Binding Status}"      Width="90"/>
+                <DataGridTextColumn Header="Created"     Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd}}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Status / Error Message -->
+        <TextBlock Grid.Row="4"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="#dc3545"
+                   Margin="0,8,0,0"
+                   TextWrapping="Wrap"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BankerDeskOps.Avalonia.Views.LoansView">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="Loans Management" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Create Loan Form -->
+        <Border Grid.Row="1" Background="#f9f9f9" BorderBrush="#dee2e6" BorderThickness="1" Padding="10" Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Customer Name:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Column="1" Text="{Binding CustomerName}" Margin="0,0,10,0" Padding="5"/>
+
+                <TextBlock Grid.Column="2" Text="Amount:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Column="3" Text="{Binding Amount}" Margin="0,0,10,0" Padding="5"/>
+
+                <TextBlock Grid.Column="4" Text="Interest Rate %:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Column="5" Text="{Binding InterestRate}" Margin="0,0,10,0" Padding="5"/>
+
+                <TextBlock Grid.Column="6" Text="Term (Months):" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Column="7" Text="{Binding TermMonths}" Padding="5"/>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Create Loan" Command="{Binding CreateLoanCommand}"
+                    Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Approve"     Command="{Binding ApproveLoanCommand}"
+                    Height="35" Padding="15,5" Background="#007acc" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Reject"      Command="{Binding RejectLoanCommand}"
+                    Height="35" Padding="15,5" Background="#dc3545" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Disburse"    Command="{Binding DisburseLoanCommand}"
+                    Height="35" Padding="15,5" Background="#6f42c1" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Delete"      Command="{Binding DeleteLoanCommand}"
+                    Height="35" Padding="15,5" Background="#6c757d" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Refresh"     Command="{Binding LoadLoansCommand}"
+                    Height="35" Padding="15,5" Background="#17a2b8" Foreground="White"/>
+        </StackPanel>
+
+        <!-- Loans DataGrid -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding Loans}"
+                  SelectedItem="{Binding SelectedLoan}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"              Binding="{Binding Id}"                          Width="220"/>
+                <DataGridTextColumn Header="Customer Name"   Binding="{Binding CustomerName}"                Width="*"/>
+                <DataGridTextColumn Header="Amount"          Binding="{Binding Amount, StringFormat={}{0:C}}" Width="110"/>
+                <DataGridTextColumn Header="Interest Rate %"  Binding="{Binding InterestRate}"               Width="110"/>
+                <DataGridTextColumn Header="Term (Months)"   Binding="{Binding TermMonths}"                  Width="110"/>
+                <DataGridTextColumn Header="Status"          Binding="{Binding Status}"                      Width="110"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Status / Error Message -->
+        <TextBlock Grid.Row="4"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="#dc3545"
+                   Margin="0,8,0,0"
+                   TextWrapping="Wrap"/>
+    </Grid>
+</UserControl>

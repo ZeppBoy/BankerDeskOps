@@ -5,6 +5,7 @@
     <Project Path="src/BankerDeskOps.Domain/BankerDeskOps.Domain.csproj" />
     <Project Path="src/BankerDeskOps.Infrastructure/BankerDeskOps.Infrastructure.csproj" />
     <Project Path="src/BankerDeskOps.Wpf/BankerDeskOps.Wpf.csproj" />
+    <Project Path="src/BankerDeskOps.Avalonia/BankerDeskOps.Avalonia.csproj" />
     <Project Path="src/BankerDeskOps.Web/BankerDeskOps.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
