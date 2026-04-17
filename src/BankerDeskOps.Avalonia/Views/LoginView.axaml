@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BankerDeskOps.Avalonia.Views.LoginView"
+             Width="400" Height="380">
+
+    <Border Background="White" CornerRadius="8" Padding="30"
+            BoxShadow="0 4 20 0 #22000000">
+        <StackPanel Spacing="14">
+
+            <TextBlock Text="BankerDeskOps" FontSize="22" FontWeight="Bold"
+                       HorizontalAlignment="Center" Margin="0,0,0,6"/>
+
+            <!-- Username -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Username"/>
+                <TextBox Text="{Binding Username}"
+                         IsEnabled="{Binding IsAnonymous, Converter={x:Static BoolConverters.Not}}"
+                         Watermark="Enter username" Padding="8"/>
+            </StackPanel>
+
+            <!-- Password -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Password"/>
+                <TextBox Text="{Binding Password}"
+                         PasswordChar="*"
+                         IsEnabled="{Binding IsAnonymous, Converter={x:Static BoolConverters.Not}}"
+                         Watermark="Enter password" Padding="8"/>
+            </StackPanel>
+
+            <!-- Anonymous checkbox -->
+            <CheckBox Content="Log in anonymously (guest mode)"
+                      IsChecked="{Binding IsAnonymous}"/>
+
+            <!-- Error message -->
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Foreground="#dc3545"
+                       TextWrapping="Wrap"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+            <!-- Login button -->
+            <Button Content="{Binding LoginButtonText}"
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding !IsLoading}"
+                    Background="#007acc" Foreground="White"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Height="40"/>
+
+            <!-- Loading indicator -->
+            <TextBlock Text="Logging in..." HorizontalAlignment="Center" Foreground="#888"
+                       IsVisible="{Binding IsLoading}"/>
+        </StackPanel>
+    </Border>
+</UserControl>

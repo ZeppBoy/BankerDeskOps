@@ -27,9 +27,18 @@ namespace BankerDeskOps.Wpf
             ConfigureServices(services);
             _serviceProvider = services.BuildServiceProvider();
 
-            // Create and show main window
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+            // Show login window first
+            var loginView = _serviceProvider.GetRequiredService<LoginView>();
+            var loginViewModel = (LoginViewModel)loginView.DataContext;
+
+            loginViewModel.LoginSucceeded += () =>
+            {
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                mainWindow.Show();
+                loginView.Close();
+            };
+
+            loginView.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -47,21 +56,29 @@ namespace BankerDeskOps.Wpf
                 return new GrpcChannelManager("https://localhost:7003", logger); // Match the API's https profile port
             });
 
+            // Add session context
+            services.AddSingleton<SessionContext>();
+
             // Add gRPC API services
             services.AddScoped<GrpcLoanApiService>();
             services.AddScoped<GrpcRetailAccountApiService>();
             services.AddScoped<GrpcBankClientApiService>();
+            services.AddScoped<GrpcUserApiService>();
 
             // Add ViewModels
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<LoansViewModel>();
             services.AddSingleton<RetailAccountsViewModel>();
             services.AddSingleton<BankClientsViewModel>();
+            services.AddSingleton<UsersViewModel>();
+            services.AddTransient<LoginViewModel>();
 
             // Add Views
             services.AddSingleton<LoansView>();
             services.AddSingleton<RetailAccountsView>();
             services.AddSingleton<BankClientsView>();
+            services.AddSingleton<UsersView>();
+            services.AddTransient<LoginView>();
             services.AddSingleton<MainWindow>();
 
             // Add logging

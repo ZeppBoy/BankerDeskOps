@@ -37,6 +37,7 @@ namespace BankerDeskOps.Infrastructure
             services.AddScoped<IRetailAccountRepository, RetailAccountRepository>();
             services.AddScoped<IBankClientRepository, BankClientRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

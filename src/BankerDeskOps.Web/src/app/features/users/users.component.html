@@ -1,0 +1,120 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1>User Management</h1>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary" (click)="openModal()">+ New User</button>
+    </div>
+  </div>
+
+  <div *ngIf="error$ | async as error" class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading$ | async" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="table-responsive" *ngIf="!(loading$ | async)">
+    <table class="table table-striped" *ngIf="(users$ | async) as users">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Last Login</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.username }}</td>
+          <td>{{ user.fullName }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge bg-info text-dark">{{ getRoleLabel(user.role) }}</span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="getStatusClass(user.status)">
+              {{ getStatusLabel(user.status) }}
+            </span>
+          </td>
+          <td>{{ user.lastLoginAt ? (user.lastLoginAt | date:'yyyy-MM-dd HH:mm') : '—' }}</td>
+          <td>{{ user.createdAt | date:'yyyy-MM-dd' }}</td>
+          <td>
+            <button *ngIf="user.status !== UserStatus.Active"
+                    class="btn btn-sm btn-success me-1"
+                    (click)="activateUser(user.id)">Activate</button>
+            <button *ngIf="user.status === UserStatus.Active"
+                    class="btn btn-sm btn-warning me-1"
+                    (click)="deactivateUser(user.id)">Deactivate</button>
+            <button class="btn btn-sm btn-info me-1 text-white" (click)="editUser(user)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- User Modal -->
+  <div *ngIf="showModal" class="modal fade show d-block" tabindex="-1" role="dialog"
+       style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editingId ? 'Edit User' : 'New User' }}</h5>
+          <button type="button" class="btn-close" (click)="hideModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Username <span class="text-danger">*</span></label>
+                <input type="text" class="form-control"
+                       [(ngModel)]="formData.username" name="username"
+                       [disabled]="!!editingId" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Role <span class="text-danger">*</span></label>
+                <select class="form-select" [(ngModel)]="formData.role" name="role">
+                  <option *ngFor="let r of roleValues" [ngValue]="r">{{ getRoleLabel(r) }}</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control"
+                       [(ngModel)]="formData.firstName" name="firstName" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control"
+                       [(ngModel)]="formData.lastName" name="lastName" required/>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control"
+                       [(ngModel)]="formData.email" name="email" required/>
+              </div>
+              <div class="col-md-6" *ngIf="!editingId">
+                <label class="form-label">Password <span class="text-danger">*</span></label>
+                <input type="password" class="form-control"
+                       [(ngModel)]="formData.password" name="password"
+                       placeholder="Min. 8 characters" required/>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="hideModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="saveUser()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

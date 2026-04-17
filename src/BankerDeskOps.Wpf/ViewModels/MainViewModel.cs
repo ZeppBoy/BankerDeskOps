@@ -14,6 +14,7 @@ namespace BankerDeskOps.Wpf.ViewModels
         private readonly LoansViewModel _loansViewModel;
         private readonly RetailAccountsViewModel _retailAccountsViewModel;
         private readonly BankClientsViewModel _bankClientsViewModel;
+        private readonly UsersViewModel _usersViewModel;
 
         [ObservableProperty]
         private ObservableObject? currentView;
@@ -22,12 +23,14 @@ namespace BankerDeskOps.Wpf.ViewModels
             ILogger<MainViewModel> logger,
             LoansViewModel loansViewModel,
             RetailAccountsViewModel retailAccountsViewModel,
-            BankClientsViewModel bankClientsViewModel)
+            BankClientsViewModel bankClientsViewModel,
+            UsersViewModel usersViewModel)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _loansViewModel = loansViewModel ?? throw new ArgumentNullException(nameof(loansViewModel));
             _retailAccountsViewModel = retailAccountsViewModel ?? throw new ArgumentNullException(nameof(retailAccountsViewModel));
             _bankClientsViewModel = bankClientsViewModel ?? throw new ArgumentNullException(nameof(bankClientsViewModel));
+            _usersViewModel = usersViewModel ?? throw new ArgumentNullException(nameof(usersViewModel));
         }
 
         /// <summary>
@@ -61,6 +64,14 @@ namespace BankerDeskOps.Wpf.ViewModels
             _logger.LogInformation("Navigating to Bank Clients view");
             CurrentView = _bankClientsViewModel;
             _bankClientsViewModel.LoadClientsCommand.Execute(null);
+        }
+
+        [RelayCommand]
+        public void NavigateToUsers()
+        {
+            _logger.LogInformation("Navigating to Users view");
+            CurrentView = _usersViewModel;
+            _usersViewModel.LoadUsersCommand.Execute(null);
         }
     }
 }

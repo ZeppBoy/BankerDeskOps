@@ -28,8 +28,18 @@ public partial class App : global::Avalonia.Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            // Show login window first; on success open the main window
+            var loginWindow    = _serviceProvider.GetRequiredService<LoginWindow>();
+            var loginViewModel = _serviceProvider.GetRequiredService<LoginViewModel>();
 
+            loginViewModel.LoginSucceeded += () =>
+            {
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                mainWindow.Show();
+                loginWindow.Close();
+            };
+
+            desktop.MainWindow = loginWindow;
             desktop.Exit += (_, _) => _serviceProvider.Dispose();
         }
 
@@ -45,19 +55,26 @@ public partial class App : global::Avalonia.Application
             return new GrpcChannelManager("https://localhost:7003", logger);
         });
 
+        // Session context
+        services.AddSingleton<SessionContext>();
+
         // gRPC API services
         services.AddScoped<GrpcLoanApiService>();
         services.AddScoped<GrpcRetailAccountApiService>();
         services.AddScoped<GrpcBankClientApiService>();
+        services.AddScoped<GrpcUserApiService>();
 
         // ViewModels
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<LoansViewModel>();
         services.AddSingleton<RetailAccountsViewModel>();
         services.AddSingleton<BankClientsViewModel>();
+        services.AddSingleton<UsersViewModel>();
+        services.AddTransient<LoginViewModel>();
 
         // Views
         services.AddSingleton<MainWindow>();
+        services.AddTransient<LoginWindow>();
 
         // Logging
         services.AddLogging(builder =>

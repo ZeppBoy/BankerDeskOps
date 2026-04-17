@@ -1,0 +1,46 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="card shadow" style="width: 400px;">
+    <div class="card-body p-4">
+      <h3 class="card-title text-center mb-4">BankerDeskOps</h3>
+
+      <div *ngIf="error$ | async as error" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="login()">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="username" name="username"
+                 [disabled]="isAnonymous"
+                 placeholder="Enter username" required/>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control"
+                 [(ngModel)]="password" name="password"
+                 [disabled]="isAnonymous"
+                 placeholder="Enter password"/>
+        </div>
+
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="anonymousCheck"
+                 [(ngModel)]="isAnonymous" name="isAnonymous"
+                 (change)="onAnonymousChange()"/>
+          <label class="form-check-label" for="anonymousCheck">
+            Log in anonymously (guest mode)
+          </label>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary"
+                  [disabled]="loading$ | async">
+            <span *ngIf="loading$ | async" class="spinner-border spinner-border-sm me-1" role="status"></span>
+            {{ loginButtonText }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

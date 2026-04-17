@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BankerDeskOps.Avalonia.Views.UsersView">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="User Management" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Create / Edit Form -->
+        <Border Grid.Row="1" Background="#f9f9f9" BorderBrush="#dee2e6" BorderThickness="1" Padding="10" Margin="0,0,0,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Row 0 -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Username:"   VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding Username}"   Margin="0,3,10,3" Padding="5"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Email:"      VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Row="0" Grid.Column="3" Text="{Binding Email}"      Margin="0,3,10,3" Padding="5"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="4" Text="Role:"       VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <ComboBox  Grid.Row="0" Grid.Column="5" ItemsSource="{Binding RoleValues}"
+                           SelectedItem="{Binding SelectedRole}" Margin="0,3,0,3" HorizontalAlignment="Stretch"/>
+
+                <!-- Row 1 -->
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="First Name:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Row="1" Grid.Column="1" Text="{Binding FirstName}"  Margin="0,3,10,3" Padding="5"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Last Name:"  VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Row="1" Grid.Column="3" Text="{Binding LastName}"   Margin="0,3,10,3" Padding="5"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="4" Text="Password:"   VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox   Grid.Row="1" Grid.Column="5" Text="{Binding Password}"
+                           PasswordChar="*" Margin="0,3,0,3" Padding="5"
+                           Watermark="Required for new users"/>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8" Spacing="5">
+            <Button Content="Create User"    Command="{Binding CreateUserCommand}"
+                    Height="35" Padding="15,5" Background="#28a745" Foreground="White"/>
+            <Button Content="Update Selected" Command="{Binding UpdateUserCommand}"
+                    Height="35" Padding="15,5" Background="#007acc" Foreground="White"/>
+            <Button Content="Activate"       Command="{Binding ActivateUserCommand}"
+                    Height="35" Padding="15,5" Background="#20c997" Foreground="White"/>
+            <Button Content="Deactivate"     Command="{Binding DeactivateUserCommand}"
+                    Height="35" Padding="15,5" Background="#fd7e14" Foreground="White"/>
+            <Button Content="Delete"         Command="{Binding DeleteUserCommand}"
+                    Height="35" Padding="15,5" Background="#dc3545" Foreground="White"/>
+            <Button Content="Refresh"        Command="{Binding LoadUsersCommand}"
+                    Height="35" Padding="15,5" Background="#17a2b8" Foreground="White"/>
+        </StackPanel>
+
+        <!-- Users DataGrid -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding Users}"
+                  SelectedItem="{Binding SelectedUser}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Username"   Binding="{Binding Username}"   Width="100"/>
+                <DataGridTextColumn Header="Full Name"  Binding="{Binding FullName}"   Width="150"/>
+                <DataGridTextColumn Header="Email"      Binding="{Binding Email}"      Width="200"/>
+                <DataGridTextColumn Header="Role"       Binding="{Binding Role}"       Width="90"/>
+                <DataGridTextColumn Header="Status"     Binding="{Binding Status}"     Width="90"/>
+                <DataGridTextColumn Header="Last Login" Binding="{Binding LastLoginAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}" Width="130"/>
+                <DataGridTextColumn Header="Created"    Binding="{Binding CreatedAt, StringFormat={}{0:yyyy-MM-dd}}"  Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Status / Error Message -->
+        <TextBlock Grid.Row="4" Text="{Binding ErrorMessage}" Foreground="#dc3545"
+                   Margin="0,8,0,0" TextWrapping="Wrap"/>
+    </Grid>
+</UserControl>

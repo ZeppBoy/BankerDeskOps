@@ -18,6 +18,9 @@
         <DataTemplate DataType="{x:Type viewmodels:BankClientsViewModel}">
             <views:BankClientsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:UsersViewModel}">
+            <views:UsersView/>
+        </DataTemplate>
     </Window.DataTemplates>
 
     <Grid>
@@ -44,6 +47,11 @@
                         Height="40" Margin="0,5"
                         Command="{Binding NavigateToBankClientsCommand}"
                         Background="#007acc" Foreground="White"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Users"
+                        Height="40" Margin="0,5"
+                        Command="{Binding NavigateToUsersCommand}"
+                        Background="#6f42c1" Foreground="White"
                         HorizontalAlignment="Stretch"/>
             </StackPanel>
         </Border>

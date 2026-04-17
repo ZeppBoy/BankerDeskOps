@@ -61,6 +61,62 @@ export enum ClientStatus {
   Suspended = 2,
 }
 
+// UserRole enum: 0=Operator, 1=Manager, 2=Admin
+export enum UserRole {
+  Operator = 0,
+  Manager = 1,
+  Admin = 2,
+}
+
+// UserStatus enum: 0=Active, 1=Inactive, 2=Locked
+export enum UserStatus {
+  Active = 0,
+  Inactive = 1,
+  Locked = 2,
+}
+
+export interface UserDto {
+  id: string;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  role: UserRole;
+  status: UserStatus;
+  lastLoginAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LoginRequest {
+  username: string;
+  password?: string;
+}
+
+export interface LoginResponse {
+  success: boolean;
+  isAnonymous: boolean;
+  errorMessage?: string;
+  user?: UserDto;
+}
+
+export interface CreateUserRequest {
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  role: UserRole;
+}
+
+export interface UpdateUserRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+}
+
 export interface BankClientDto {
   id: string;
   firstName: string;

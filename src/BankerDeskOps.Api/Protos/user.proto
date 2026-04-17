@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+option csharp_namespace = "BankerDeskOps.Api.Protos";
+
+package banker_desk_ops;
+
+import "google/protobuf/empty.proto";
+
+enum UserRole {
+  OPERATOR = 0;
+  MANAGER = 1;
+  ADMIN = 2;
+}
+
+enum UserStatus {
+  USER_ACTIVE = 0;
+  USER_INACTIVE = 1;
+  USER_LOCKED = 2;
+}
+
+message UserMessage {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  string first_name = 4;
+  string last_name = 5;
+  UserRole role = 6;
+  UserStatus status = 7;
+  string last_login_at = 8;
+  string created_at = 9;
+  string updated_at = 10;
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string password = 5;
+  UserRole role = 6;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string email = 2;
+  string first_name = 3;
+  string last_name = 4;
+  UserRole role = 5;
+}
+
+message GetAllUsersResponse {
+  repeated UserMessage users = 1;
+}
+
+message GetUserByIdRequest {
+  string id = 1;
+}
+
+message GetUserByIdResponse {
+  UserMessage user = 1;
+}
+
+message CreateUserResponse {
+  UserMessage user = 1;
+}
+
+message UpdateUserResponse {
+  UserMessage user = 1;
+}
+
+message ActivateUserRequest {
+  string id = 1;
+}
+
+message ActivateUserResponse {
+  UserMessage user = 1;
+}
+
+message DeactivateUserRequest {
+  string id = 1;
+}
+
+message DeactivateUserResponse {
+  UserMessage user = 1;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message DeleteUserResponse {
+  bool success = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  UserMessage user = 2;
+  bool is_anonymous = 3;
+  string error_message = 4;
+}
+
+service UserService {
+  rpc GetAllUsers      (google.protobuf.Empty)   returns (GetAllUsersResponse);
+  rpc GetUserById      (GetUserByIdRequest)       returns (GetUserByIdResponse);
+  rpc CreateUser       (CreateUserRequest)        returns (CreateUserResponse);
+  rpc UpdateUser       (UpdateUserRequest)        returns (UpdateUserResponse);
+  rpc ActivateUser     (ActivateUserRequest)      returns (ActivateUserResponse);
+  rpc DeactivateUser   (DeactivateUserRequest)    returns (DeactivateUserResponse);
+  rpc DeleteUser       (DeleteUserRequest)        returns (DeleteUserResponse);
+  rpc Login            (LoginRequest)             returns (LoginResponse);
+}
