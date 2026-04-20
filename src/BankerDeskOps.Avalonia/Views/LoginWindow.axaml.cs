@@ -13,6 +13,7 @@ public partial class LoginWindow : Window
     public LoginWindow(LoginViewModel loginViewModel) : this()
     {
         DataContext = loginViewModel ?? throw new ArgumentNullException(nameof(loginViewModel));
-        loginViewModel.LoginSucceeded += Close;
+        // NOTE: LoginSucceeded is handled in App.axaml.cs, which first reassigns
+        // desktop.MainWindow before closing this window to prevent application shutdown.
     }
 }
