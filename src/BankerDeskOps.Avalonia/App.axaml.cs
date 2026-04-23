@@ -30,11 +30,13 @@ public partial class App : global::Avalonia.Application
         {
             // Show login window first; on success open the main window
             var loginWindow    = _serviceProvider.GetRequiredService<LoginWindow>();
-            var loginViewModel = _serviceProvider.GetRequiredService<LoginViewModel>();
+            // LoginViewModel is Transient — retrieve the exact instance the window was given
+            var loginViewModel = (LoginViewModel)loginWindow.DataContext!;
 
             loginViewModel.LoginSucceeded += () =>
             {
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                desktop.MainWindow = mainWindow; // Update MainWindow BEFORE closing login
                 mainWindow.Show();
                 loginWindow.Close();
             };
