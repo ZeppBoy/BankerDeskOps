@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "dotnet",
+			"task": "build",
+			"file": "C:\\VsCodeProjects\\BankerDeskOps\\src\\BankerDeskOps.Api\\BankerDeskOps.Api.csproj",
+			"problemMatcher": [],
+			"label": "dotnet: build BankerDeskOps.Api"
+		},
+		{
+			"type": "dotnet",
+			"task": "build",
+			"file": "C:\\VsCodeProjects\\BankerDeskOps\\src\\BankerDeskOps.Avalonia\\BankerDeskOps.Avalonia.csproj",
+			"problemMatcher": [],
+			"label": "dotnet: build BankerDeskOps.Avalonia"
+		},
+		{
+			"type": "dotnet",
+			"task": "watch BankerDeskOps.Api",
+			"file": "C:\\VsCodeProjects\\BankerDeskOps\\src\\BankerDeskOps.Api\\BankerDeskOps.Api.csproj",
+			"problemMatcher": [],
+			"label": "dotnet: watch BankerDeskOps.Api"
+		}
+	]
+}

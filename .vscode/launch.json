@@ -1,0 +1,65 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "BankerDeskOps.Api",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/BankerDeskOps.Api/BankerDeskOps.Api.csproj",
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
+        },
+        {
+            "name": "BankerDeskOps.Wpf",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/BankerDeskOps.Wpf/BankerDeskOps.Wpf.csproj"
+        },
+        {
+            "name": "BankerDeskOps.Avalonia",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/BankerDeskOps.Avalonia/BankerDeskOps.Avalonia.csproj"
+        },
+        {
+            "name": "BankerDeskOps.Web",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "start"],
+            "cwd": "${workspaceFolder}/src/BankerDeskOps.Web",
+            "serverReadyAction": {
+                "pattern": "Local:.*http://localhost:([0-9]+)",
+                "uriFormat": "http://localhost:%s",
+                "action": "openExternally"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Api + Avalonia",
+            "configurations": [
+                "BankerDeskOps.Api",
+                "BankerDeskOps.Avalonia"
+            ],
+            "stopAll": true
+        },
+        {
+            "name": "Api + Web",
+            "configurations": [
+                "BankerDeskOps.Api",
+                "BankerDeskOps.Web"
+            ],
+            "stopAll": true
+        },
+        {
+            "name": "Api + Wpf",
+            "configurations": [
+                "BankerDeskOps.Api",
+                "BankerDeskOps.Wpf"
+            ],
+            "stopAll": true
+        }
+    ]
+}
