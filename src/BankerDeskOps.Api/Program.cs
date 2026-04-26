@@ -27,6 +27,7 @@ builder.Services.AddScoped<IRetailAccountService, RetailAccountService>();
 builder.Services.AddScoped<IBankClientService, BankClientService>();
 builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 // Add gRPC service implementations
 builder.Services.AddScoped<LoanServiceImpl>();

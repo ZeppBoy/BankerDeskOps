@@ -37,10 +37,20 @@ namespace BankerDeskOps.Infrastructure.Data
         /// </summary>
         public DbSet<Contract> Contracts { get; set; } = null!;
 
-        /// <summary>
+                /// <summary>
         /// DbSet for User entities.
         /// </summary>
         public DbSet<User> Users { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for Transaction entities.
+        /// </summary>
+        public DbSet<Transaction> Transactions { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for Entry entities (double-entry bookkeeping).
+        /// </summary>
+        public DbSet<Entry> Entries { get; set; } = null!;
 
         /// <summary>
         /// Configures the model by applying entity configurations.
@@ -56,6 +66,8 @@ namespace BankerDeskOps.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new BankClientConfiguration());
             modelBuilder.ApplyConfiguration(new ContractConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new EntryConfiguration());
         }
     }
 }

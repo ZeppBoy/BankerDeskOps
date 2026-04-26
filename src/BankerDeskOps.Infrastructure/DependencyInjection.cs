@@ -32,12 +32,14 @@ namespace BankerDeskOps.Infrastructure
                 options.UseSqlServer(connectionString,
                     sqlServerOptions => sqlServerOptions.MigrationsAssembly(typeof(DependencyInjection).Assembly.GetName().Name)));
 
-            // Register repositories
+                        // Register repositories
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<IRetailAccountRepository, RetailAccountRepository>();
             services.AddScoped<IBankClientRepository, BankClientRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+                        services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<IEntryRepository, EntryRepository>();
 
             return services;
         }
