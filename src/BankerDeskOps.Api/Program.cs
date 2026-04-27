@@ -35,6 +35,7 @@ builder.Services.AddScoped<RetailAccountServiceImpl>();
 builder.Services.AddScoped<BankClientServiceImpl>();
 builder.Services.AddScoped<ContractServiceImpl>();
 builder.Services.AddScoped<UserServiceImpl>();
+builder.Services.AddScoped<TransactionServiceImpl>();
 
 // Add Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -106,6 +107,7 @@ app.MapGrpcService<RetailAccountServiceImpl>();
 app.MapGrpcService<BankClientServiceImpl>();
 app.MapGrpcService<ContractServiceImpl>();
 app.MapGrpcService<UserServiceImpl>();
+app.MapGrpcService<TransactionServiceImpl>();
 
 // Map REST controllers (kept for backward compatibility)
 app.MapControllers();
