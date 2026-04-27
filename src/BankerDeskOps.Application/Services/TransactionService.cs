@@ -88,7 +88,7 @@ namespace BankerDeskOps.Application.Services
                 Amount = request.Amount,
                 EntryType = EntryType.Debit,
                 BalanceAfter = sourceAccount.Balance - request.Amount,
-                Description = request.Description ?? $"Transfer to account {destinationAccount.AccountNumber}",
+                Description = request.Description ?? $"Transfer to account {destinationAccount.Iban}",
                 CreatedAt = now
             };
 
@@ -101,7 +101,7 @@ namespace BankerDeskOps.Application.Services
                 Amount = request.Amount,
                 EntryType = EntryType.Credit,
                 BalanceAfter = destinationAccount.Balance + request.Amount,
-                Description = request.Description ?? $"Transfer from account {sourceAccount.AccountNumber}",
+                Description = request.Description ?? $"Transfer from account {sourceAccount.Iban}",
                 CreatedAt = now
             };
 

@@ -36,11 +36,13 @@ namespace BankerDeskOps.Application.Services
             if (string.IsNullOrWhiteSpace(request.CustomerName))
                 throw new ArgumentException("Customer name cannot be empty.", nameof(request.CustomerName));
 
+            string accountNumber = GenerateAccountNumber();
             var account = new RetailAccount
             {
                 Id = Guid.NewGuid(),
                 CustomerName = request.CustomerName,
-                AccountNumber = GenerateAccountNumber(),
+                AccountNumber = accountNumber,
+                Iban = GenerateIban(accountNumber),
                 Balance = request.InitialDeposit,
                 AccountType = request.AccountType,
                 OpenedAt = DateTime.UtcNow,
@@ -104,6 +106,7 @@ namespace BankerDeskOps.Application.Services
                 Id = account.Id,
                 CustomerName = account.CustomerName,
                 AccountNumber = account.AccountNumber,
+                Iban = account.Iban,
                 Balance = account.Balance,
                 AccountType = account.AccountType,
                 OpenedAt = account.OpenedAt,
@@ -115,6 +118,52 @@ namespace BankerDeskOps.Application.Services
         {
             // Generate a 10-digit account number (format: XXXXXXXXXX)
             return DateTime.UtcNow.Ticks.ToString().Substring(0, 10);
+        }
+
+        private static string GenerateIban(string accountNumber)
+        {
+            // IBAN format: CountryCode(2) + CheckDigits(2) + BBAN
+            // Using "US" as country code and a simple bank identifier
+            const string countryCode = "US";
+            const string bankIdentifier = "12345678";
+
+            // Build the BBAN part: bank identifier + account number (padded to 10 digits)
+            string bban = bankIdentifier + accountNumber.PadLeft(10, '0');
+
+            // Calculate check digits using MOD-97 algorithm
+            string checkDigits = CalculateIbanCheckDigits(countryCode, bban);
+
+            return $"{countryCode}{checkDigits}{bban}";
+        }
+
+        private static string CalculateIbanCheckDigits(string countryCode, string bban)
+        {
+            // Rearrange: BBAN + country code (converted to numbers) + "00"
+            string rearranged = bban + ConvertCountryCodeToNumber(countryCode) + "00";
+
+            // Perform MOD-97 on the rearranged string
+            long remainder = 0;
+            foreach (char c in rearranged)
+            {
+                int digitValue = char.IsDigit(c) ? c - '0' : c - 'A' + 10;
+                remainder = (remainder * 10 + digitValue) % 97;
+            }
+
+            return ((98 - remainder) % 97).ToString("D2");
+        }
+
+        private static string ConvertCountryCodeToNumber(string countryCode)
+        {
+            if (string.IsNullOrEmpty(countryCode) || countryCode.Length != 2)
+                throw new ArgumentException("Invalid country code.");
+
+            int result = 0;
+            foreach (char c in countryCode.ToUpper())
+            {
+                result = result * 100 + (c - 'A' + 1);
+            }
+
+            return result.ToString();
         }
     }
 }

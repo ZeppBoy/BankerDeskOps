@@ -32,19 +32,41 @@ namespace BankerDeskOps.Infrastructure.Configurations
                 .HasMaxLength(20)
                 .HasColumnType("nvarchar(20)");
 
+
+
+
+            builder.Property(x => x.Iban)
+                .IsRequired(false)
+                .HasMaxLength(34)
+                .HasColumnType("nvarchar(34)");
+
+
             builder.Property(x => x.Balance)
                 .IsRequired()
-                .HasColumnType("decimal(18, 2)");
 
+
+
+
+                .HasColumnType("decimal(18, 2)");
             builder.Property(x => x.AccountType)
                 .IsRequired()
+
+
+
+
                 .HasColumnType("int")
                 .HasConversion<int>();
-
             builder.Property(x => x.OpenedAt)
                 .IsRequired()
                 .HasColumnType("datetime2")
                 .HasDefaultValueSql("GETUTCDATE()");
+
+
+
+
+
+
+
 
             builder.Property(x => x.UpdatedAt)
                 .IsRequired()
@@ -55,6 +77,8 @@ namespace BankerDeskOps.Infrastructure.Configurations
             builder.HasIndex(x => x.AccountNumber)
                 .IsUnique()
                 .HasDatabaseName("UX_RetailAccounts_AccountNumber");
+
+
 
             builder.HasIndex(x => x.CustomerName)
                 .HasDatabaseName("IX_RetailAccounts_CustomerName");

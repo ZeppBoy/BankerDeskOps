@@ -18,10 +18,11 @@ message RetailAccount {
   string id = 1;
   string customer_name = 2;
   string account_number = 3;
+  string iban = 7;
   double balance = 4;
   AccountType account_type = 5;
   string opened_at = 6;
-  string updated_at = 7;
+  string updated_at = 8;
 }
 
 // Open account request

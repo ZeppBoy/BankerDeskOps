@@ -23,6 +23,11 @@ namespace BankerDeskOps.Domain.Entities
         public string AccountNumber { get; set; } = string.Empty;
 
         /// <summary>
+        /// IBAN code for the account.
+        /// </summary>
+        public string Iban { get; set; } = string.Empty;
+
+        /// <summary>
         /// Current balance in the account.
         /// </summary>
         public decimal Balance { get; set; }

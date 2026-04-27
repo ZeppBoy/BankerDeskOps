@@ -85,6 +85,7 @@ message TransactionDto {
 message EntryDto {
   string id = 1;
   string account_id = 2;
+  string account_iban = 10;
   double amount = 3;
   int32 entry_type = 4;
   double balance_after = 5;
@@ -162,6 +163,7 @@ public class EntryDto
     public Guid Id { get; set; }
     public Guid TransactionId { get; set; }
     public Guid AccountId { get; set; }
+    public string? AccountIban { get; set; }
     public decimal Amount { get; set; }
     public Domain.Enums.EntryType EntryType { get; set; }
     public decimal BalanceAfter { get; set; }
@@ -194,6 +196,7 @@ public class EntryDto
   - `MapEntryToProto(EntryDto) → Protos.EntryDto`
 - Handle enum conversions between domain enums and proto enums
 - Convert `decimal` ↔ `double` for amounts
+- Map `EntryDto.AccountIban` to `Protos.EntryDto.account_iban` — the IBAN for the entry's account (looked up from the account entity when building the DTO)
 
 **Error Handling:**
 - Wrap `InvalidOperationException` → `StatusCode.NotFound`
@@ -366,17 +369,17 @@ services.AddScoped<GrpcTransactionApiService>();
 │  Transactions Management                             │
 ├─────────────────────────────────────────────────────┤
 │  Transfer Form:                                     │
-│  Source Account [Dropdown ▼] Dest Account [Dropdown▼]│
+│  Source IBAN [Dropdown ▼] Dest IBAN [Dropdown▼]     │
 │  Amount: [_______] Description: [_____________]     │
 ├─────────────────────────────────────────────────────┤
 │  [Transfer Funds] [Refresh]                          │
 ├─────────────────────────────────────────────────────┤
 │  Transactions DataGrid:                              │
-│  ┌──────┬──────────┬──────────┬────────┬──────────┐ │
-│  │ ID   │ Type     │ Status   │ Amount │ Created  │ │
-│  ├──────┼──────────┼──────────┼────────┼──────────┤ │
-│  │ ...  │ Transfer │ Completed│ $500.00│ 2024-... │ │
-│  └──────┴──────────┴──────────┴────────┴──────────┘ │
+│  ┌──────┬──────────┬──────────┬──────────┬────────┬──────────┐ │
+│  │ ID   │ Type     │ Status   │ Src IBAN │ Dst IBAN│ Created  │ │
+│  ├──────┼──────────┼──────────┼──────────┼────────┼──────────┤ │
+│  │ ...  │ Transfer │ Completed│ US12...  │ GB29...│ 2024-... │ │
+│  └──────┴──────────┴──────────┴──────────┴────────┴──────────┘ │
 ├─────────────────────────────────────────────────────┤
 │  Error Message (if any)                              │
 └─────────────────────────────────────────────────────┘

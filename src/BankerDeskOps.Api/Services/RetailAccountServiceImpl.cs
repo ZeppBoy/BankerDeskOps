@@ -158,6 +158,7 @@ namespace BankerDeskOps.Api.Services
                 Id = account.Id.ToString(),
                 CustomerName = account.CustomerName,
                 AccountNumber = account.AccountNumber,
+                Iban = account.Iban ?? string.Empty,
                 Balance = (double)account.Balance,
                 AccountType = (AccountType)(int)account.AccountType,
                 OpenedAt = account.OpenedAt.ToString("o"),

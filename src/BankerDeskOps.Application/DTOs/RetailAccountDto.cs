@@ -23,6 +23,11 @@ namespace BankerDeskOps.Application.DTOs
         public string AccountNumber { get; set; } = string.Empty;
 
         /// <summary>
+        /// IBAN code for the account.
+        /// </summary>
+        public string Iban { get; set; } = string.Empty;
+
+        /// <summary>
         /// Current balance.
         /// </summary>
         public decimal Balance { get; set; }
