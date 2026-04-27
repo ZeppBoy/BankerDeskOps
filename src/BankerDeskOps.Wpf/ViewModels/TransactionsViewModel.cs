@@ -13,6 +13,7 @@ namespace BankerDeskOps.Wpf.ViewModels
     public partial class TransactionsViewModel : ObservableObject
     {
         private readonly GrpcTransactionApiService _grpcClient;
+        private readonly GrpcRetailAccountApiService _accountClient;
         private readonly ILogger<TransactionsViewModel> _logger;
 
         [ObservableProperty]
@@ -20,6 +21,12 @@ namespace BankerDeskOps.Wpf.ViewModels
 
         [ObservableProperty]
         private TransactionDto? _selectedTransaction;
+
+        [ObservableProperty]
+        private ObservableCollection<RetailAccountDto> _sourceAccounts = new();
+
+        [ObservableProperty]
+        private ObservableCollection<RetailAccountDto> _destinationAccounts = new();
 
         [ObservableProperty]
         private Guid _sourceAccountId = Guid.Empty;
@@ -39,10 +46,34 @@ namespace BankerDeskOps.Wpf.ViewModels
         [ObservableProperty]
         private string? _errorMessage;
 
-        public TransactionsViewModel(GrpcTransactionApiService grpcClient, ILogger<TransactionsViewModel> logger)
+        public TransactionsViewModel(GrpcTransactionApiService grpcClient, GrpcRetailAccountApiService accountClient, ILogger<TransactionsViewModel> logger)
         {
             _grpcClient = grpcClient ?? throw new ArgumentNullException(nameof(grpcClient));
+            _accountClient = accountClient ?? throw new ArgumentNullException(nameof(accountClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        /// <summary>
+        /// Loads all retail accounts for the source and destination dropdowns.
+        /// </summary>
+        private async Task LoadAccountsAsync()
+        {
+            try
+            {
+                _logger.LogInformation("Loading retail accounts for transfer dropdowns");
+                var accounts = await _accountClient.GetAllAccountsAsync();
+                SourceAccounts.Clear();
+                DestinationAccounts.Clear();
+                foreach (var account in accounts)
+                {
+                    SourceAccounts.Add(account);
+                    DestinationAccounts.Add(account);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading retail accounts for dropdowns");
+            }
         }
 
         /// <summary>
@@ -55,6 +86,8 @@ namespace BankerDeskOps.Wpf.ViewModels
             ErrorMessage = null;
             try
             {
+                await LoadAccountsAsync();
+
                 _logger.LogInformation("Loading transactions");
                 var result = await _grpcClient.GetAllTransactionsAsync();
                 Transactions.Clear();

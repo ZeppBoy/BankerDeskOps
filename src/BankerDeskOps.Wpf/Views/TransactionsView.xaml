@@ -31,14 +31,16 @@
                 <!-- Source Account -->
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Source Account:" Margin="5" VerticalAlignment="Center"/>
                 <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding SourceAccounts}"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding SourceAccountId, Mode=TwoWay}" Margin="5"/>
+                          DisplayMemberPath="AccountNumber"
+                           SelectedValuePath="Id"
+                           SelectedValue="{Binding SourceAccountId, Mode=TwoWay}" Margin="5"/>
 
                 <!-- Destination Account -->
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Destination Account:" Margin="5" VerticalAlignment="Center"/>
                 <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding DestinationAccounts}"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding DestinationAccountId, Mode=TwoWay}" Margin="5"/>
+                          DisplayMemberPath="AccountNumber"
+                           SelectedValuePath="Id"
+                           SelectedValue="{Binding DestinationAccountId, Mode=TwoWay}" Margin="5"/>
 
                 <!-- Amount -->
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Amount:" Margin="5" VerticalAlignment="Center"/>
