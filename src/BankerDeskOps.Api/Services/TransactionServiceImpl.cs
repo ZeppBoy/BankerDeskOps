@@ -75,9 +75,9 @@ namespace BankerDeskOps.Api.Services
             }
         }
 
-        private static Protos.TransactionDto MapTransactionToProto(Application.DTOs.TransactionDto transaction)
+        private static Protos.Transaction MapTransactionToProto(Application.DTOs.TransactionDto transaction)
         {
-            var proto = new Protos.TransactionDto
+            var proto = new Protos.Transaction
             {
                 Id = transaction.Id.ToString(),
                 TransactionType = MapTransactionType(transaction.TransactionType),
@@ -97,9 +97,9 @@ namespace BankerDeskOps.Api.Services
             return proto;
         }
 
-        private static Protos.EntryDto MapEntryToProto(Application.DTOs.EntryDto entry)
+        private static Protos.Entry MapEntryToProto(Application.DTOs.EntryDto entry)
         {
-            return new Protos.EntryDto
+            return new Protos.Entry
             {
                 Id = entry.Id.ToString(),
                 TransactionId = entry.TransactionId.ToString(),

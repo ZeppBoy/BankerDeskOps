@@ -28,6 +28,11 @@
         <DataTemplate DataType="{x:Type viewmodels:UsersViewModel}">
             <views:UsersView/>
         </DataTemplate>
+
+        <!-- DataTemplate for TransactionsViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:TransactionsViewModel}">
+            <views:TransactionsView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Grid>
@@ -43,6 +48,7 @@
             <Button Content="Retail Accounts" Height="40" Margin="0,5" Command="{Binding NavigateToRetailAccountsCommand}" Background="#007acc" Foreground="White"/>
             <Button Content="Bank Clients" Height="40" Margin="0,5" Command="{Binding NavigateToBankClientsCommand}" Background="#007acc" Foreground="White"/>
             <Button Content="Users" Height="40" Margin="0,5" Command="{Binding NavigateToUsersCommand}" Background="#6f42c1" Foreground="White"/>
+            <Button Content="Transactions" Height="40" Margin="0,5" Command="{Binding NavigateToTransactionsCommand}" Background="#007acc" Foreground="White"/>
         </StackPanel>
 
         <!-- Content Area -->

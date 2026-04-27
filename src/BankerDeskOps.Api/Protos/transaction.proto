@@ -23,16 +23,16 @@ enum EntryType {
   CREDIT = 2;
 }
 
-message TransactionDto {
+message Transaction {
   string id = 1;
   TransactionType transaction_type = 2;
   TransactionStatus status = 3;
   string reference_id = 4;
-  repeated EntryDto entries = 5;
+  repeated Entry entries = 5;
   string created_at = 6;
 }
 
-message EntryDto {
+message Entry {
   string id = 1;
   string transaction_id = 2;
   string account_id = 3;
@@ -51,11 +51,11 @@ message TransferFundsRequest {
 }
 
 message TransferFundsResponse {
-  TransactionDto transaction = 1;
+  Transaction transaction = 1;
 }
 
 message GetAllTransactionsResponse {
-  repeated TransactionDto transactions = 1;
+  repeated Transaction transactions = 1;
 }
 
 message GetTransactionByIdRequest {
@@ -63,7 +63,7 @@ message GetTransactionByIdRequest {
 }
 
 message GetTransactionByIdResponse {
-  TransactionDto transaction = 1;
+  Transaction transaction = 1;
 }
 
 service TransactionService {

@@ -15,6 +15,7 @@ namespace BankerDeskOps.Wpf.ViewModels
         private readonly RetailAccountsViewModel _retailAccountsViewModel;
         private readonly BankClientsViewModel _bankClientsViewModel;
         private readonly UsersViewModel _usersViewModel;
+        private readonly TransactionsViewModel _transactionsViewModel;
 
         [ObservableProperty]
         private ObservableObject? currentView;
@@ -24,13 +25,15 @@ namespace BankerDeskOps.Wpf.ViewModels
             LoansViewModel loansViewModel,
             RetailAccountsViewModel retailAccountsViewModel,
             BankClientsViewModel bankClientsViewModel,
-            UsersViewModel usersViewModel)
+            UsersViewModel usersViewModel,
+            TransactionsViewModel transactionsViewModel)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _loansViewModel = loansViewModel ?? throw new ArgumentNullException(nameof(loansViewModel));
             _retailAccountsViewModel = retailAccountsViewModel ?? throw new ArgumentNullException(nameof(retailAccountsViewModel));
             _bankClientsViewModel = bankClientsViewModel ?? throw new ArgumentNullException(nameof(bankClientsViewModel));
             _usersViewModel = usersViewModel ?? throw new ArgumentNullException(nameof(usersViewModel));
+            _transactionsViewModel = transactionsViewModel ?? throw new ArgumentNullException(nameof(transactionsViewModel));
         }
 
         /// <summary>
@@ -72,6 +75,17 @@ namespace BankerDeskOps.Wpf.ViewModels
             _logger.LogInformation("Navigating to Users view");
             CurrentView = _usersViewModel;
             _usersViewModel.LoadUsersCommand.Execute(null);
+        }
+
+        /// <summary>
+        /// Navigates to the Transactions view.
+        /// </summary>
+        [RelayCommand]
+        public void NavigateToTransactions()
+        {
+            _logger.LogInformation("Navigating to Transactions view");
+            CurrentView = _transactionsViewModel;
+            _transactionsViewModel.LoadTransactionsCommand.Execute(null);
         }
     }
 }

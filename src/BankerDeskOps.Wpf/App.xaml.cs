@@ -64,6 +64,7 @@ namespace BankerDeskOps.Wpf
             services.AddScoped<GrpcRetailAccountApiService>();
             services.AddScoped<GrpcBankClientApiService>();
             services.AddScoped<GrpcUserApiService>();
+            services.AddScoped<GrpcTransactionApiService>();
 
             // Add ViewModels
             services.AddSingleton<MainViewModel>();
@@ -71,6 +72,7 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<RetailAccountsViewModel>();
             services.AddSingleton<BankClientsViewModel>();
             services.AddSingleton<UsersViewModel>();
+            services.AddSingleton<TransactionsViewModel>();
             services.AddTransient<LoginViewModel>();
 
             // Add Views
@@ -78,6 +80,7 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<RetailAccountsView>();
             services.AddSingleton<BankClientsView>();
             services.AddSingleton<UsersView>();
+            services.AddSingleton<TransactionsView>();
             services.AddTransient<LoginView>();
             services.AddSingleton<MainWindow>();
 
