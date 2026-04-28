@@ -62,6 +62,7 @@
                 <DataGridTextColumn Header="Balance" Binding="{Binding Balance, StringFormat=C}" Width="120"/>
                 <DataGridTextColumn Header="Account Type" Binding="{Binding AccountType}" Width="100"/>
                 <DataGridTextColumn Header="Opened" Binding="{Binding OpenedAt, StringFormat=d}" Width="100"/>
+                <DataGridTextColumn Header="IBAN" Binding="{Binding Iban}" Width="150"/> <!-- Added IBAN column -->
             </DataGrid.Columns>
         </DataGrid>
 
