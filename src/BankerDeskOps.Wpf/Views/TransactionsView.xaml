@@ -68,7 +68,7 @@
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
                 <DataGridTextColumn Header="Reference ID" Binding="{Binding ReferenceId}" Width="*"/>
                 <DataGridTextColumn Header="Created At" Binding="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm:ss'}" Width="120"/>
-                <DataGridTextColumn Header="IBAN" Binding="{Binding Iban}" Width="150"/> <!-- Added IBAN column -->
+
             </DataGrid.Columns>
         </DataGrid>
 

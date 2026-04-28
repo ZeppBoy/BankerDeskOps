@@ -159,6 +159,7 @@ namespace BankerDeskOps.Wpf.Services
                 Id = Guid.Parse(account.Id),
                 CustomerName = account.CustomerName,
                 AccountNumber = account.AccountNumber,
+                Iban = account.Iban,
                 Balance = (decimal)account.Balance,
                 AccountType = (Domain.Enums.AccountType)(int)account.AccountType,
                 OpenedAt = DateTime.Parse(account.OpenedAt),
