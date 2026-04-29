@@ -14,10 +14,10 @@ Attributes:
 Types: Fixed, Variable
 Attributes:
 - Id (Guid)
-- ProductId (FK)
 - RateType
 - Value (decimal)
-- EffectiveDate (DateTime)
+- SinceDate (DateTime)
+- ToDate (DateTime)
 ### Currency
 Attributes:
 - Id (Guid)
@@ -52,13 +52,16 @@ Tables:
    - amount
 5. Commissions 
    - commissionId PK
-   - productId FK
    - type (Application/Origination)
    - amount
 6. RepaymentSchedules 
    - scheduleId PK
    - loanApplicationId FK
-   - plannedDate, capital, interest, saldo, eir
+   - plannedDate (DateTime)
+   - capital (decimal)
+   - interest (decimal)
+   - saldo (decimal)
+   - eir (decimal)
 7. LoanApplications 
    - loanId PK
    - productId FK
@@ -86,7 +89,9 @@ Tables:
 ## 4. Business Logic Implementation
 Key Features:
 1. EIR Calculation using XIRR formula:
-   - Must include all fees and commissions in calculation
+   - Must include all fees and commissions in calculation (disbursement fee, commitment fee, etc.)
+   - Formula input: cash flows (initial loan amount minus fees/commissions, periodic interest payments, principal repayments) and dates.
+   - Algorithm: Newton-Raphson or similar iterative method to find the root of the net present value equation.
 2. RecalculateSchedule() Method:
    - Allow schedule recalculation based on:
      * Interest rate changes
@@ -104,7 +109,13 @@ Key Features:
    - Role-based access control for forms
    - Audit logs for financial calculations
    - Proper error handling and logging
-## 5. Implementation Phases:
+## 6. Expected Tech Stack
+- **Language**: C# (.NET 8+)
+- **Framework**: Windows Forms or .NET MAUI (for desktop)
+- **ORM**: Entity Framework Core
+- **Database**: SQL Server / PostgreSQL
+- **Testing**: xUnit / NUnit
+- **Design Pattern**: Repository, Service, and Unit of Work patterns
 1. Requirements Analysis & Design 
    - Finalize requirements with stakeholders
    - Create database schema
