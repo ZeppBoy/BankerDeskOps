@@ -53,6 +53,41 @@ namespace BankerDeskOps.Infrastructure.Data
         public DbSet<Entry> Entries { get; set; } = null!;
 
         /// <summary>
+        /// DbSet for Currency entities.
+        /// </summary>
+        public DbSet<Currency> Currencies { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for Product entities.
+        /// </summary>
+        public DbSet<Product> Products { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for Rate entities.
+        /// </summary>
+        public DbSet<Rate> Rates { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for Fee entities.
+        /// </summary>
+        public DbSet<Fee> Fees { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for Commission entities.
+        /// </summary>
+        public DbSet<Commission> Commissions { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for LoanApplication entities.
+        /// </summary>
+        public DbSet<LoanApplication> LoanApplications { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for RepaymentSchedule entities.
+        /// </summary>
+        public DbSet<RepaymentSchedule> RepaymentSchedules { get; set; } = null!;
+
+        /// <summary>
         /// Configures the model by applying entity configurations.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
@@ -68,6 +103,13 @@ namespace BankerDeskOps.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
             modelBuilder.ApplyConfiguration(new EntryConfiguration());
+            modelBuilder.ApplyConfiguration(new CurrencyConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new RateConfiguration());
+            modelBuilder.ApplyConfiguration(new FeeConfiguration());
+            modelBuilder.ApplyConfiguration(new CommissionConfiguration());
+            modelBuilder.ApplyConfiguration(new LoanApplicationConfiguration());
+            modelBuilder.ApplyConfiguration(new RepaymentScheduleConfiguration());
         }
     }
 }

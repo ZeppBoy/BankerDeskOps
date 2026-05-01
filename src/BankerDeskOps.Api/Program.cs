@@ -29,6 +29,13 @@ builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
+// Add AI-powered loan processing services
+builder.Services.AddScoped<ILoanValidationService, LoanValidationService>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IAIAnalysisService, AIAnalysisService>();
+builder.Services.AddScoped<IDecisionEngineService, DecisionEngineService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+
 // Add gRPC service implementations
 builder.Services.AddScoped<LoanServiceImpl>();
 builder.Services.AddScoped<RetailAccountServiceImpl>();

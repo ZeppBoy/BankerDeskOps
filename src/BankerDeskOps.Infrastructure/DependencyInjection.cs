@@ -38,8 +38,15 @@ namespace BankerDeskOps.Infrastructure
             services.AddScoped<IBankClientRepository, BankClientRepository>();
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-                        services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IEntryRepository, EntryRepository>();
+            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IRateRepository, RateRepository>();
+            services.AddScoped<IFeeRepository, FeeRepository>();
+            services.AddScoped<ICommissionRepository, CommissionRepository>();
+            services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
+            services.AddScoped<IRepaymentScheduleRepository, RepaymentScheduleRepository>();
 
             return services;
         }
