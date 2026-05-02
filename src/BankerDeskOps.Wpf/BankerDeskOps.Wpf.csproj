@@ -17,6 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,8 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <UsingTask TaskName="CommunityToolkit.Mvvm.SourceGenerators.ToolkitSourceGenerator" AssemblyFile="$(NuGetPackageRoot)/communitytoolkit.mvvm/8.4.2/build/net6.0/CommunityToolkit.Mvvm.SourceGenerators.dll" />
+
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>

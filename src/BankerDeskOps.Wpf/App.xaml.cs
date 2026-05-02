@@ -66,6 +66,15 @@ namespace BankerDeskOps.Wpf
             services.AddScoped<GrpcUserApiService>();
             services.AddScoped<GrpcTransactionApiService>();
 
+            // Add REST API services for configuration management
+            services.AddSingleton<ApiClient>();
+            services.AddScoped<CurrencyApiService>();
+            services.AddScoped<ProductApiService>();
+            services.AddScoped<RateApiService>();
+            services.AddScoped<FeeApiService>();
+            services.AddScoped<CommissionApiService>();
+            services.AddScoped<LoanApplicationApiService>();
+
             // Add ViewModels
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<LoansViewModel>();
@@ -73,6 +82,12 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<BankClientsViewModel>();
             services.AddSingleton<UsersViewModel>();
             services.AddSingleton<TransactionsViewModel>();
+            services.AddSingleton<CurrencyViewModel>();
+            services.AddSingleton<ProductViewModel>();
+            services.AddSingleton<RateViewModel>();
+            services.AddSingleton<FeeViewModel>();
+            services.AddSingleton<CommissionViewModel>();
+            services.AddSingleton<LoanApplicationReviewViewModel>();
             services.AddTransient<LoginViewModel>();
 
             // Add Views
@@ -81,6 +96,12 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<BankClientsView>();
             services.AddSingleton<UsersView>();
             services.AddSingleton<TransactionsView>();
+            services.AddSingleton<CurrencyView>();
+            services.AddSingleton<ProductView>();
+            services.AddSingleton<RateView>();
+            services.AddSingleton<FeeView>();
+            services.AddSingleton<CommissionView>();
+            services.AddSingleton<LoanApplicationReviewView>();
             services.AddTransient<LoginView>();
             services.AddSingleton<MainWindow>();
 

@@ -33,6 +33,36 @@
         <DataTemplate DataType="{x:Type viewmodels:TransactionsViewModel}">
             <views:TransactionsView/>
         </DataTemplate>
+
+        <!-- DataTemplate for CurrencyViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:CurrencyViewModel}">
+            <views:CurrencyView/>
+        </DataTemplate>
+
+        <!-- DataTemplate for ProductViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:ProductViewModel}">
+            <views:ProductView/>
+        </DataTemplate>
+
+        <!-- DataTemplate for RateViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:RateViewModel}">
+            <views:RateView/>
+        </DataTemplate>
+
+        <!-- DataTemplate for FeeViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:FeeViewModel}">
+            <views:FeeView/>
+        </DataTemplate>
+
+        <!-- DataTemplate for CommissionViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:CommissionViewModel}">
+            <views:CommissionView/>
+        </DataTemplate>
+
+        <!-- DataTemplate for LoanApplicationReviewViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:LoanApplicationReviewViewModel}">
+            <views:LoanApplicationReviewView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Grid>
@@ -49,6 +79,16 @@
             <Button Content="Bank Clients" Height="40" Margin="0,5" Command="{Binding NavigateToBankClientsCommand}" Background="#007acc" Foreground="White"/>
             <Button Content="Users" Height="40" Margin="0,5" Command="{Binding NavigateToUsersCommand}" Background="#6f42c1" Foreground="White"/>
             <Button Content="Transactions" Height="40" Margin="0,5" Command="{Binding NavigateToTransactionsCommand}" Background="#007acc" Foreground="White"/>
+
+            <TextBlock Text="Configuration" FontSize="14" FontWeight="Bold" Margin="0,20,0,10" Foreground="#6c757d"/>
+            <Button Content="Currencies" Height="40" Margin="0,5" Command="{Binding NavigateToCurrenciesCommand}" Background="#e83e8c" Foreground="White"/>
+            <Button Content="Products" Height="40" Margin="0,5" Command="{Binding NavigateToProductsCommand}" Background="#e83e8c" Foreground="White"/>
+            <Button Content="Rates" Height="40" Margin="0,5" Command="{Binding NavigateToRatesCommand}" Background="#e83e8c" Foreground="White"/>
+            <Button Content="Fees" Height="40" Margin="0,5" Command="{Binding NavigateToFeesCommand}" Background="#e83e8c" Foreground="White"/>
+            <Button Content="Commissions" Height="40" Margin="0,5" Command="{Binding NavigateToCommissionsCommand}" Background="#e83e8c" Foreground="White"/>
+
+            <TextBlock Text="Review" FontSize="14" FontWeight="Bold" Margin="0,20,0,10" Foreground="#6c757d"/>
+            <Button Content="Loan Applications" Height="40" Margin="0,5" Command="{Binding NavigateToLoanApplicationReviewCommand}" Background="#fd7e14" Foreground="White"/>
         </StackPanel>
 
         <!-- Content Area -->
