@@ -15,7 +15,8 @@
 
         <TextBlock Grid.Row="0" Text="Product Management" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
-        <Grid Grid.Row="1" Background="#f9f9f9" Padding="10">
+        <Border Grid.Row="1" Background="#f9f9f9" Padding="10">
+            <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -33,7 +34,8 @@
 
             <Label Grid.Column="4" Content="Active:" VerticalAlignment="Center"/>
             <CheckBox Grid.Column="5" IsChecked="{Binding IsActive}" VerticalAlignment="Center" Margin="5,0,0,0"/>
-        </Grid>
+            </Grid>
+        </Border>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
             <Button Content="Save Product" Command="{Binding SaveProductCommand}" Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>

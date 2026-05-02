@@ -242,7 +242,7 @@ namespace BankerDeskOps.Wpf.ViewModels
             return errors;
         }
 
-        public IEnumerable<string>? GetErrors(string? propertyName)
+        public System.Collections.IEnumerable GetErrors(string? propertyName)
         {
             if (propertyName == null || !_errors.TryGetValue(propertyName, out var errors))
                 return Enumerable.Empty<string>();

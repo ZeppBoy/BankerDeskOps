@@ -25,8 +25,6 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <UsingTask TaskName="CommunityToolkit.Mvvm.SourceGenerators.ToolkitSourceGenerator" AssemblyFile="$(NuGetPackageRoot)/communitytoolkit.mvvm/8.4.2/build/net6.0/CommunityToolkit.Mvvm.SourceGenerators.dll" />
-
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>

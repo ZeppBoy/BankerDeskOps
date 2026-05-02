@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 
 namespace BankerDeskOps.Wpf.ViewModels
 {
@@ -239,7 +240,7 @@ namespace BankerDeskOps.Wpf.ViewModels
             return errors;
         }
 
-        public IEnumerable<string>? GetErrors(string? propertyName)
+        public System.Collections.IEnumerable GetErrors(string? propertyName)
         {
             if (propertyName == null || !_errors.TryGetValue(propertyName, out var errors))
                 return Enumerable.Empty<string>();
