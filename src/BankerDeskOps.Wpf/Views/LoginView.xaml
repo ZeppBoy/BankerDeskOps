@@ -47,7 +47,8 @@
         <!-- Login Button -->
         <Button Grid.Row="4" Command="{Binding LoginCommand}" Height="40"
                 Background="#007acc" Foreground="White" FontSize="14" FontWeight="SemiBold"
-                Margin="0,0,0,10">
+                Margin="0,0,0,10"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource InvertBoolConverter}}">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Content" Value="Log In"/>
@@ -55,14 +56,18 @@
                         <DataTrigger Binding="{Binding IsAnonymous}" Value="True">
                             <Setter Property="Content" Value="Enter as Guest"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                            <Setter Property="Content" Value="Logging in..."/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Button.Style>
         </Button>
 
         <!-- Error message -->
-        <TextBlock Grid.Row="5" Text="{Binding ErrorMessage}" Foreground="#dc3545"
-                   TextWrapping="Wrap" FontSize="12"/>
+        <TextBlock Grid.Row="5" Text="{Binding ErrorMessage, Mode=OneWay}" Foreground="#dc3545"
+                    Visibility="{Binding IsErrorMessageVisible, Converter={StaticResource BoolToVis}}"
+                    TextWrapping="Wrap" FontSize="12"/>
     </Grid>
 
   

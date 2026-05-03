@@ -1,3 +1,4 @@
+using System.Windows.Threading;
 using BankerDeskOps.Wpf.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,12 +11,20 @@ namespace BankerDeskOps.Wpf.ViewModels
         private readonly GrpcUserApiService _userApiService;
         private readonly SessionContext _sessionContext;
         private readonly ILogger<LoginViewModel> _logger;
+        private readonly Dispatcher? _dispatcher;
 
         [ObservableProperty] private string username = string.Empty;
         [ObservableProperty] private string password = string.Empty;
         [ObservableProperty] private bool isAnonymous;
-        [ObservableProperty] private string? errorMessage;
+        [ObservableProperty] private string errorMessage = string.Empty;
         [ObservableProperty] private bool isLoading;
+
+        public bool IsErrorMessageVisible => !string.IsNullOrEmpty(ErrorMessage);
+
+        partial void OnErrorMessageChanged(string value)
+        {
+            OnPropertyChanged(nameof(IsErrorMessageVisible));
+        }
 
         public event Action? LoginSucceeded;
 
@@ -24,6 +33,7 @@ namespace BankerDeskOps.Wpf.ViewModels
             _userApiService = userApiService ?? throw new ArgumentNullException(nameof(userApiService));
             _sessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _dispatcher = Dispatcher.CurrentDispatcher;
         }
 
         [RelayCommand]
@@ -32,7 +42,7 @@ namespace BankerDeskOps.Wpf.ViewModels
             try
             {
                 IsLoading = true;
-                ErrorMessage = null;
+                ErrorMessage = string.Empty;
 
                 if (IsAnonymous)
                 {
@@ -48,6 +58,7 @@ namespace BankerDeskOps.Wpf.ViewModels
                         Status = Domain.Enums.UserStatus.Active
                     };
                     _sessionContext.IsAnonymous = true;
+                    IsLoading = false;
                     LoginSucceeded?.Invoke();
                     return;
                 }
@@ -55,6 +66,7 @@ namespace BankerDeskOps.Wpf.ViewModels
                 if (string.IsNullOrWhiteSpace(Username))
                 {
                     ErrorMessage = "Username is required";
+                    IsLoading = false;
                     return;
                 }
 
@@ -74,8 +86,8 @@ namespace BankerDeskOps.Wpf.ViewModels
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Login error");
                 ErrorMessage = $"Connection error: {ex.Message}";
-                _logger.LogError("Login error: {Message}", ex.Message);
             }
             finally
             {

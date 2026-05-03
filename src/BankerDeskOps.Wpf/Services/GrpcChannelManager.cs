@@ -60,7 +60,14 @@ namespace BankerDeskOps.Wpf.Services
         /// </summary>
         public void Dispose()
         {
-            CloseAsync().Wait();
+            try
+            {
+                CloseAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error closing gRPC channel");
+            }
         }
     }
 }

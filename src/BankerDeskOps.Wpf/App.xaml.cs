@@ -22,6 +22,24 @@ namespace BankerDeskOps.Wpf
         {
             base.OnStartup(e);
 
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
+                var exception = e.ExceptionObject as Exception;
+                MessageBox.Show($"A critical error occurred: {exception?.Message}", "Application Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            };
+
+            DispatcherUnhandledException += (s, ex) =>
+            {
+                ex.Handled = true;
+                MessageBox.Show($"An unexpected error occurred: {ex.Exception.Message}", "Application Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            };
+
+            TaskScheduler.UnobservedTaskException += (s, ex) =>
+            {
+                ex.SetObserved();
+                MessageBox.Show($"A background task failed: {ex.Exception?.Message}", "Background Task Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            };
+
             // Configure dependency injection
             var services = new ServiceCollection();
             ConfigureServices(services);
