@@ -67,6 +67,12 @@ namespace BankerDeskOps.Wpf
 
         private void ConfigureServices(ServiceCollection services)
         {
+            // Add HTTP client for REST API calls
+            services.AddHttpClient<ApiClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7003");
+            });
+
             // Add gRPC channel manager
             services.AddSingleton<GrpcChannelManager>(provider =>
             {
@@ -85,7 +91,6 @@ namespace BankerDeskOps.Wpf
             services.AddScoped<GrpcTransactionApiService>();
 
             // Add REST API services for configuration management
-            services.AddSingleton<ApiClient>();
             services.AddScoped<CurrencyApiService>();
             services.AddScoped<ProductApiService>();
             services.AddScoped<RateApiService>();
