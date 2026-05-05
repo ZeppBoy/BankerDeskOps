@@ -35,7 +35,11 @@ namespace BankerDeskOps.Application.Services
                 Id = Guid.NewGuid(),
                 Name = request.Name,
                 Description = request.Description,
-                IsActive = request.IsActive
+                IsActive = request.IsActive,
+                Term = request.Term,
+                MinAmount = request.MinAmount,
+                MaxAmount = request.MaxAmount,
+                CurrencyId = request.CurrencyId
             };
 
             var created = await _repository.CreateAsync(entity);
@@ -50,6 +54,10 @@ namespace BankerDeskOps.Application.Services
             entity.Name = request.Name;
             entity.Description = request.Description;
             entity.IsActive = request.IsActive;
+            entity.Term = request.Term;
+            entity.MinAmount = request.MinAmount;
+            entity.MaxAmount = request.MaxAmount;
+            entity.CurrencyId = request.CurrencyId;
 
             var updated = await _repository.UpdateAsync(entity);
             return MapToDto(updated);
@@ -65,7 +73,11 @@ namespace BankerDeskOps.Application.Services
             Id = entity.Id,
             Name = entity.Name,
             Description = entity.Description,
-            IsActive = entity.IsActive
+            IsActive = entity.IsActive,
+            Term = entity.Term,
+            MinAmount = entity.MinAmount,
+            MaxAmount = entity.MaxAmount,
+            CurrencyId = entity.CurrencyId
         };
     }
 }

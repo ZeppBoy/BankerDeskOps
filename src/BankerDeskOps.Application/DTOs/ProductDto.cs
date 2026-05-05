@@ -6,6 +6,10 @@ namespace BankerDeskOps.Application.DTOs
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public bool IsActive { get; set; }
+        public int Term { get; set; }
+        public decimal MinAmount { get; set; }
+        public decimal MaxAmount { get; set; }
+        public Guid CurrencyId { get; set; }
     }
 
     public class CreateProductRequest
@@ -13,6 +17,10 @@ namespace BankerDeskOps.Application.DTOs
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
+        public int Term { get; set; }
+        public decimal MinAmount { get; set; }
+        public decimal MaxAmount { get; set; }
+        public Guid CurrencyId { get; set; }
     }
 
     public class UpdateProductRequest
@@ -21,5 +29,9 @@ namespace BankerDeskOps.Application.DTOs
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public bool IsActive { get; set; }
+        public int Term { get; set; }
+        public decimal MinAmount { get; set; }
+        public decimal MaxAmount { get; set; }
+        public Guid CurrencyId { get; set; }
     }
 }
