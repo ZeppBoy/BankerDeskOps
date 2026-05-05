@@ -1,5 +1,6 @@
 using BankerDeskOps.Api.Middleware;
 using BankerDeskOps.Api.Services;
+using BankerDeskOps.Application;
 using BankerDeskOps.Application.Interfaces;
 using BankerDeskOps.Application.Services;
 using BankerDeskOps.Domain.Entities;
@@ -22,12 +23,7 @@ builder.Services.AddGrpc();
 builder.Services.AddInfrastructure(connectionString);
 
 // Add application services
-builder.Services.AddScoped<ILoanService, LoanService>();
-builder.Services.AddScoped<IRetailAccountService, RetailAccountService>();
-builder.Services.AddScoped<IBankClientService, BankClientService>();
-builder.Services.AddScoped<IContractService, ContractService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddApplication();
 
 // Add AI-powered loan processing services
 builder.Services.AddScoped<ILoanValidationService, LoanValidationService>();
@@ -76,10 +72,10 @@ using (var scope = app.Services.CreateScope())
     {
         await dbContext.Database.MigrateAsync();
 
-        // Seed default admin user if no users exist
+                                // Seed default admin user if no users exist
         if (!await dbContext.Users.AnyAsync())
         {
-            dbContext.Users.Add(new User
+            dbContext.Users.Add(new User()
             {
                 Id = Guid.NewGuid(),
                 Username = "admin",
@@ -92,6 +88,20 @@ using (var scope = app.Services.CreateScope())
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             });
+            await dbContext.SaveChangesAsync();
+        }
+
+        // Seed default currencies if none exist
+        if (!await dbContext.Currencies.AnyAsync())
+        {
+            var defaultCurrencies = new[]
+            {
+                new Currency { Id = Guid.NewGuid(), Code = "USD", Name = "US Dollar" },
+                new Currency { Id = Guid.NewGuid(), Code = "EUR", Name = "Euro" },
+                new Currency { Id = Guid.NewGuid(), Code = "GBP", Name = "British Pound" },
+                new Currency { Id = Guid.NewGuid(), Code = "UAH", Name = "Ukrainian Hryvnia" }
+            };
+            dbContext.Currencies.AddRange(defaultCurrencies);
             await dbContext.SaveChangesAsync();
         }
     }
