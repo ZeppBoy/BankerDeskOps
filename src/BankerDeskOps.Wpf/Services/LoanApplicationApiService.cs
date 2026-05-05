@@ -7,7 +7,7 @@ namespace BankerDeskOps.Wpf.Services
     {
         private readonly ApiClient _apiClient;
         private readonly ILogger<LoanApplicationApiService> _logger;
-        private const string Endpoint = "api/loan-applications";
+        private const string Endpoint = "api/LoanApplications";
 
         public LoanApplicationApiService(ApiClient apiClient, ILogger<LoanApplicationApiService> logger)
         {
