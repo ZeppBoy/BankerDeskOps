@@ -1,0 +1,111 @@
+<UserControl x:Class="BankerDeskOps.Wpf.Views.RepaymentScheduleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="650" d:DesignWidth="900">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Loan Applications selector -->
+                <RowDefinition Height="Auto"/>
+                <!-- Action buttons -->
+                <RowDefinition Height="Auto"/>
+                <!-- New entry form -->
+                <RowDefinition Height="Auto"/>
+                <!-- Schedule grid + delete button -->
+                <RowDefinition Height="*"/>
+                <!-- Error message -->
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <TextBlock Grid.Row="0" Text="Repayment Schedules" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <!-- Loan Application Selector -->
+            <Border Grid.Row="1" Background="#f9f9f9" Padding="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Content="Loan Application:" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Applications}"
+                              SelectedItem="{Binding SelectedApplication}"
+                              DisplayMemberPath="RequestId" Padding="5"/>
+                </Grid>
+            </Border>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,10">
+                <Button Content="Load Schedules" Command="{Binding LoadSchedulesForApplicationCommand}"
+                        Height="35" Padding="15,5" Background="#007bff" Foreground="White" Margin="0,0,5,0"/>
+                <Button Content="Refresh Applications" Command="{Binding LoadAllCommand}"
+                        Height="35" Padding="15,5" Background="#17a2b8" Foreground="White"/>
+            </StackPanel>
+
+            <!-- New Entry Form -->
+            <Border Grid.Row="3" Background="#e8f4fd" Padding="10" Margin="0,0,0,10" BorderBrush="#b3d9ff" BorderThickness="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Content="#:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding PaymentNumber, UpdateSourceTrigger=PropertyChanged}" Padding="5" MaxWidth="60"/>
+
+                    <Label Grid.Column="2" Content="Due Date:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <DatePicker Grid.Column="3" SelectedDate="{Binding DueDate, UpdateSourceTrigger=PropertyChanged}" Padding="5" MaxWidth="120"/>
+
+                    <Label Grid.Column="4" Content="Principal:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBox Grid.Column="5" Text="{Binding PrincipalAmount, UpdateSourceTrigger=PropertyChanged}" Padding="5" MaxWidth="100"/>
+
+                    <Label Grid.Column="6" Content="Interest:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBox Grid.Column="7" Text="{Binding InterestAmount, UpdateSourceTrigger=PropertyChanged}" Padding="5" MaxWidth="100"/>
+
+                    <Label Grid.Column="8" Content="Total:" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBox Grid.Column="9" Text="{Binding TotalPayment, UpdateSourceTrigger=PropertyChanged}" Padding="5" MaxWidth="100"/>
+
+                    <Button Grid.Column="10" Content="Add Entry" Command="{Binding AddEntryCommand}"
+                            Height="32" Padding="15,5" Background="#28a745" Foreground="White" Margin="8,0,0,0"/>
+                </Grid>
+            </Border>
+
+            <!-- Schedule DataGrid + Delete Button -->
+            <DockPanel Grid.Row="4">
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,5,0,0">
+                    <Button Content="Delete Selected Entry" Command="{Binding DeleteEntryCommand}"
+                            Height="30" Padding="12,3" Background="#dc3545" Foreground="White"/>
+                </StackPanel>
+
+                <DataGrid ItemsSource="{Binding Schedules}" SelectedItem="{Binding SelectedSchedule}"
+                          CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True"
+                          SelectionMode="Single" SelectionUnit="FullRow">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding PaymentNumber}" Width="50"/>
+                        <DataGridTextColumn Header="Due Date" Binding="{Binding DueDate, StringFormat='dd.MM.yyyy'}" Width="100"/>
+                        <DataGridTextColumn Header="Principal" Binding="{Binding PrincipalAmount, StringFormat='{}{0:C2}'}" Width="110"/>
+                        <DataGridTextColumn Header="Interest" Binding="{Binding InterestAmount, StringFormat='{}{0:C2}'}" Width="110"/>
+                        <DataGridTextColumn Header="Total Payment" Binding="{Binding TotalPayment, StringFormat='{}{0:C2}'}" Width="120"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+
+            <!-- Error Message -->
+            <TextBlock Grid.Row="5" Text="{Binding ErrorMessage}" Foreground="#dc3545" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

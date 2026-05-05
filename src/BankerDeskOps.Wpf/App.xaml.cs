@@ -97,6 +97,7 @@ namespace BankerDeskOps.Wpf
             services.AddScoped<FeeApiService>();
             services.AddScoped<CommissionApiService>();
             services.AddScoped<LoanApplicationApiService>();
+            services.AddScoped<RepaymentScheduleApiService>();
 
             // Add ViewModels
             services.AddSingleton<MainViewModel>();
@@ -108,9 +109,10 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<CurrencyViewModel>();
             services.AddSingleton<ProductViewModel>();
             services.AddSingleton<RateViewModel>();
-            services.AddSingleton<FeeViewModel>();
+                        services.AddSingleton<FeeViewModel>();
             services.AddSingleton<CommissionViewModel>();
             services.AddSingleton<LoanApplicationReviewViewModel>();
+            services.AddSingleton<RepaymentScheduleViewModel>();
             services.AddTransient<LoginViewModel>();
 
             // Add Views
@@ -122,9 +124,10 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<CurrencyView>();
             services.AddSingleton<ProductView>();
             services.AddSingleton<RateView>();
-            services.AddSingleton<FeeView>();
+                        services.AddSingleton<FeeView>();
             services.AddSingleton<CommissionView>();
             services.AddSingleton<LoanApplicationReviewView>();
+            services.AddSingleton<RepaymentScheduleView>();
             services.AddTransient<LoginView>();
             services.AddSingleton<MainWindow>();
 

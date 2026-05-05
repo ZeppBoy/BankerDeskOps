@@ -20,8 +20,9 @@ namespace BankerDeskOps.Wpf.ViewModels
         private readonly ProductViewModel _productViewModel;
         private readonly RateViewModel _rateViewModel;
         private readonly FeeViewModel _feeViewModel;
-        private readonly CommissionViewModel _commissionViewModel;
+                private readonly CommissionViewModel _commissionViewModel;
         private readonly LoanApplicationReviewViewModel _loanApplicationReviewViewModel;
+        private readonly RepaymentScheduleViewModel _repaymentScheduleViewModel;
 
         [ObservableProperty]
         private ObservableObject? currentView;
@@ -37,8 +38,9 @@ namespace BankerDeskOps.Wpf.ViewModels
             ProductViewModel productViewModel,
             RateViewModel rateViewModel,
             FeeViewModel feeViewModel,
-            CommissionViewModel commissionViewModel,
-            LoanApplicationReviewViewModel loanApplicationReviewViewModel)
+                        CommissionViewModel commissionViewModel,
+            LoanApplicationReviewViewModel loanApplicationReviewViewModel,
+            RepaymentScheduleViewModel repaymentScheduleViewModel)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _loansViewModel = loansViewModel ?? throw new ArgumentNullException(nameof(loansViewModel));
@@ -50,8 +52,9 @@ namespace BankerDeskOps.Wpf.ViewModels
             _productViewModel = productViewModel ?? throw new ArgumentNullException(nameof(productViewModel));
             _rateViewModel = rateViewModel ?? throw new ArgumentNullException(nameof(rateViewModel));
             _feeViewModel = feeViewModel ?? throw new ArgumentNullException(nameof(feeViewModel));
-            _commissionViewModel = commissionViewModel ?? throw new ArgumentNullException(nameof(commissionViewModel));
+                        _commissionViewModel = commissionViewModel ?? throw new ArgumentNullException(nameof(commissionViewModel));
             _loanApplicationReviewViewModel = loanApplicationReviewViewModel ?? throw new ArgumentNullException(nameof(loanApplicationReviewViewModel));
+            _repaymentScheduleViewModel = repaymentScheduleViewModel ?? throw new ArgumentNullException(nameof(repaymentScheduleViewModel));
         }
 
         /// <summary>
@@ -146,12 +149,20 @@ namespace BankerDeskOps.Wpf.ViewModels
             _commissionViewModel.LoadCommissionsCommand.Execute(null);
         }
 
-        [RelayCommand]
+                [RelayCommand]
         public void NavigateToLoanApplicationReview()
         {
             _logger.LogInformation("Navigating to Loan Application Review view");
             CurrentView = _loanApplicationReviewViewModel;
             _loanApplicationReviewViewModel.LoadApplicationsCommand.Execute(null);
+        }
+
+        [RelayCommand]
+        public void NavigateToRepaymentSchedules()
+        {
+            _logger.LogInformation("Navigating to Repayment Schedules view");
+            CurrentView = _repaymentScheduleViewModel;
+            _repaymentScheduleViewModel.LoadAllCommand.Execute(null);
         }
     }
 }

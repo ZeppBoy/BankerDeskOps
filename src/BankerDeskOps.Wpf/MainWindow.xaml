@@ -59,9 +59,14 @@
             <views:CommissionView/>
         </DataTemplate>
 
-        <!-- DataTemplate for LoanApplicationReviewViewModel -->
+                <!-- DataTemplate for LoanApplicationReviewViewModel -->
         <DataTemplate DataType="{x:Type viewmodels:LoanApplicationReviewViewModel}">
             <views:LoanApplicationReviewView/>
+        </DataTemplate>
+
+        <!-- DataTemplate for RepaymentScheduleViewModel -->
+        <DataTemplate DataType="{x:Type viewmodels:RepaymentScheduleViewModel}">
+            <views:RepaymentScheduleView/>
         </DataTemplate>
     </Window.Resources>
     
@@ -87,8 +92,9 @@
             <Button Content="Fees" Height="40" Margin="0,5" Command="{Binding NavigateToFeesCommand}" Background="#e83e8c" Foreground="White"/>
             <Button Content="Commissions" Height="40" Margin="0,5" Command="{Binding NavigateToCommissionsCommand}" Background="#e83e8c" Foreground="White"/>
 
-            <TextBlock Text="Review" FontSize="14" FontWeight="Bold" Margin="0,20,0,10" Foreground="#6c757d"/>
+                        <TextBlock Text="Review" FontSize="14" FontWeight="Bold" Margin="0,20,0,10" Foreground="#6c757d"/>
             <Button Content="Loan Applications" Height="40" Margin="0,5" Command="{Binding NavigateToLoanApplicationReviewCommand}" Background="#fd7e14" Foreground="White"/>
+            <Button Content="Repayment Schedules" Height="40" Margin="0,5" Command="{Binding NavigateToRepaymentSchedulesCommand}" Background="#20c997" Foreground="White"/>
         </StackPanel>
 
         <!-- Content Area -->
