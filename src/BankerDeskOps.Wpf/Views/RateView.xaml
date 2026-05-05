@@ -9,76 +9,79 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Rate Configuration" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
-        <Border Grid.Row="1" Background="#f9f9f9" Padding="10">
+        <Border Grid.Row="1" Background="#f9f9f9" Padding="10" BorderBrush="#dee2e6" BorderThickness="1">
             <StackPanel>
-            <Grid Margin="0,0,0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="Product ID:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Text="{Binding ProductId}" Padding="5"/>
-            </Grid>
+                    <Label Grid.Column="0" Content="Product ID:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding ProductId, UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
+                </Grid>
 
-            <Grid Margin="0,0,0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="Min Amount:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Text="{Binding MinAmount}" Margin="0,0,10,0" Padding="5"/>
+                    <Label Grid.Column="0" Content="Min Amount:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding MinAmount, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Padding="5"/>
 
-                <Label Grid.Column="2" Content="Max Amount:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="3" Text="{Binding MaxAmount}" Padding="5"/>
-            </Grid>
+                    <Label Grid.Column="2" Content="Max Amount:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="3" Text="{Binding MaxAmount, UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
+                </Grid>
 
-            <Grid Margin="0,0,0,5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="Min Term (Months):" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Text="{Binding MinTermMonths}" Margin="0,0,10,0" Padding="5"/>
+                    <Label Grid.Column="0" Content="Min Term (Months):" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding MinTermMonths, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Padding="5"/>
 
-                <Label Grid.Column="2" Content="Max Term (Months):" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="3" Text="{Binding MaxTermMonths}" Padding="5"/>
-            </Grid>
+                    <Label Grid.Column="2" Content="Max Term (Months):" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="3" Text="{Binding MaxTermMonths, UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
+                </Grid>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="Rate Value (%):" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" Text="{Binding RateValue}" Padding="5"/>
-            </Grid>
+                    <Label Grid.Column="0" Content="Rate Value (%):" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Text="{Binding RateValue, UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
+                </Grid>
             </StackPanel>
         </Border>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Save Rate" Command="{Binding SaveRateCommand}" Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
-            <Button Content="Edit" Command="{Binding EditRateCommand}" Height="35" Padding="15,5" Background="#ffc107" Foreground="Black" Margin="0,0,5,0"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,10">
+            <Button Content="Save" Command="{Binding SaveRateCommand}" Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Edit Selected" Command="{Binding EditRateCommand}" Height="35" Padding="15,5" Background="#ffc107" Foreground="Black" Margin="0,0,5,0"/>
             <Button Content="Delete" Command="{Binding DeleteRateCommand}" Height="35" Padding="15,5" Background="#dc3545" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="Cancel" Command="{Binding CancelEditCommand}" Height="35" Padding="15,5" Background="#6c757d" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="Load All" Command="{Binding LoadRatesCommand}" Height="35" Padding="15,5" Background="#17a2b8" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="By Product" Command="{Binding LoadRatesByProductCommand}" Height="35" Padding="15,5" Background="#6f42c1" Foreground="White"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Rates}" SelectedItem="{Binding SelectedRate}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,40,0,0">
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Rates}" SelectedItem="{Binding SelectedRate}"
+                  CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True"
+                  SelectionMode="Single" SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="150"/>
                 <DataGridTextColumn Header="Product ID" Binding="{Binding ProductId}" Width="150"/>
@@ -90,6 +93,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="#dc3545" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <Border Grid.Row="4" Margin="0,10,0,0">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="#dc3545" TextWrapping="Wrap"/>
+        </Border>
     </Grid>
 </UserControl>

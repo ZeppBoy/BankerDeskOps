@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Windows;
 
 namespace BankerDeskOps.Wpf.ViewModels
 {
@@ -162,6 +162,15 @@ namespace BankerDeskOps.Wpf.ViewModels
                 ErrorMessage = "Please select a currency to delete";
                 return;
             }
+
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete the currency \"{SelectedCurrency.Code}\" ({SelectedCurrency.Name})?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return;
 
             try
             {

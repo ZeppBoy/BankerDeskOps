@@ -9,38 +9,41 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="Currency Management" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
 
-        <Border Grid.Row="1" Background="#f9f9f9" Padding="10">
+        <Border Grid.Row="1" Background="#f9f9f9" Padding="10" BorderBrush="#dee2e6" BorderThickness="1">
             <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Grid.Column="0" Content="Currency Code:" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="1" Text="{Binding Code}" Margin="0,0,10,0" Padding="5"/>
+                <Label Grid.Column="0" Content="Currency Code:" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Padding="5"/>
 
-            <Label Grid.Column="2" Content="Currency Name:" VerticalAlignment="Center"/>
-            <TextBox Grid.Column="3" Text="{Binding Name}" Padding="5"/>
-        </Grid>
+                <Label Grid.Column="2" Content="Currency Name:" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Padding="5"/>
+            </Grid>
         </Border>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Save Currency" Command="{Binding SaveCurrencyCommand}" Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
-            <Button Content="Edit" Command="{Binding EditCurrencyCommand}" Height="35" Padding="15,5" Background="#ffc107" Foreground="Black" Margin="0,0,5,0"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,10">
+            <Button Content="Save" Command="{Binding SaveCurrencyCommand}" Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Edit Selected" Command="{Binding EditCurrencyCommand}" Height="35" Padding="15,5" Background="#ffc107" Foreground="Black" Margin="0,0,5,0"/>
             <Button Content="Delete" Command="{Binding DeleteCurrencyCommand}" Height="35" Padding="15,5" Background="#dc3545" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="Cancel" Command="{Binding CancelEditCommand}" Height="35" Padding="15,5" Background="#6c757d" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="Refresh" Command="{Binding LoadCurrenciesCommand}" Height="35" Padding="15,5" Background="#17a2b8" Foreground="White"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Currencies}" SelectedItem="{Binding SelectedCurrency}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="0,40,0,0">
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Currencies}" SelectedItem="{Binding SelectedCurrency}"
+                  CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True"
+                  SelectionMode="Single" SelectionUnit="FullRow">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="200"/>
                 <DataGridTextColumn Header="Code" Binding="{Binding Code}" Width="100"/>
@@ -48,6 +51,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="#dc3545" Margin="0,10,0,0" TextWrapping="Wrap"/>
+        <Border Grid.Row="4" Margin="0,10,0,0">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="#dc3545" TextWrapping="Wrap"/>
+        </Border>
     </Grid>
 </UserControl>
