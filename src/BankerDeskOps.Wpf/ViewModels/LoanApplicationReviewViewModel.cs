@@ -1,5 +1,6 @@
 using BankerDeskOps.Application.DTOs;
 using BankerDeskOps.Wpf.Services;
+using BankerDeskOps.Wpf.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,7 @@ using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Windows;
 
 namespace BankerDeskOps.Wpf.ViewModels
 {
@@ -14,6 +16,7 @@ namespace BankerDeskOps.Wpf.ViewModels
     {
         private readonly LoanApplicationApiService _applicationApiService;
         private readonly RepaymentScheduleApiService _scheduleApiService;
+        private readonly ProductApiService _productApiService;
         private readonly ILogger<LoanApplicationReviewViewModel> _logger;
         private Dictionary<string, List<string>> _errors = new();
 
@@ -37,6 +40,10 @@ namespace BankerDeskOps.Wpf.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<string> uploadedDocumentNames = new();
+
+        // Products for create dialog
+        [ObservableProperty]
+        private ObservableCollection<ProductDto> products = new();
 
         // Repayment Schedule properties
         [ObservableProperty]
@@ -63,10 +70,11 @@ namespace BankerDeskOps.Wpf.ViewModels
         public bool HasErrors => _errors.Values.Any(e => e.Count > 0);
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
-        public LoanApplicationReviewViewModel(LoanApplicationApiService applicationApiService, RepaymentScheduleApiService scheduleApiService, ILogger<LoanApplicationReviewViewModel> logger)
+        public LoanApplicationReviewViewModel(LoanApplicationApiService applicationApiService, RepaymentScheduleApiService scheduleApiService, ProductApiService productApiService, ILogger<LoanApplicationReviewViewModel> logger)
         {
             _applicationApiService = applicationApiService ?? throw new ArgumentNullException(nameof(applicationApiService));
             _scheduleApiService = scheduleApiService ?? throw new ArgumentNullException(nameof(scheduleApiService));
+            _productApiService = productApiService ?? throw new ArgumentNullException(nameof(productApiService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -85,6 +93,14 @@ namespace BankerDeskOps.Wpf.ViewModels
                 {
                     if (string.IsNullOrWhiteSpace(FilterStatus) || app.Status.Equals(FilterStatus, StringComparison.OrdinalIgnoreCase))
                         Applications.Add(app);
+                }
+
+                // Load products for the create dialog
+                var products = await _productApiService.GetAllProductsAsync();
+                Products.Clear();
+                foreach (var product in products)
+                {
+                    Products.Add(product);
                 }
             }
             catch (Exception ex)
@@ -269,6 +285,58 @@ namespace BankerDeskOps.Wpf.ViewModels
             if (propertyName == null || !_errors.TryGetValue(propertyName, out var errors))
                 return Enumerable.Empty<string>();
             return errors;
+        }
+
+        // --- Create Loan Application Dialog ---
+
+        [RelayCommand]
+        public async Task OpenCreateDialog()
+        {
+            try
+            {
+                ErrorMessage = null;
+
+                var viewModel = new CreateLoanApplicationViewModel(
+                    Products,
+                    async (request) =>
+                    {
+                        IsLoading = true;
+                        ErrorMessage = null;
+                        try
+                        {
+                            _logger.LogInformation("Creating loan application for product {ProductId}", request.ProductId);
+                            var created = await _applicationApiService.CreateLoanApplicationAsync(request);
+                            if (created != null)
+                            {
+                                Applications.Add(created);
+                                ErrorMessage = "Loan application created successfully.";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ErrorMessage = $"Error creating loan application: {ex.Message}";
+                            _logger.LogError("Failed to create loan application: {Message}", ex.Message);
+                        }
+                        finally
+                        {
+                            IsLoading = false;
+                        }
+                    },
+                    () => { /* dialog closed */ });
+
+                var window = new CreateLoanApplicationWindow
+                {
+                    DataContext = viewModel,
+                    Owner = System.Windows.Application.Current.MainWindow
+                };
+
+                window.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error opening create dialog: {ex.Message}";
+                _logger.LogError("Failed to open create dialog: {Message}", ex.Message);
+            }
         }
 
         // --- Repayment Schedule Commands ---

@@ -71,5 +71,19 @@ namespace BankerDeskOps.Wpf.Services
                 throw;
             }
         }
+
+        public async Task<LoanApplicationDto?> CreateLoanApplicationAsync(CreateLoanApplicationRequest request)
+        {
+            try
+            {
+                _logger.LogInformation("Creating loan application for product {ProductId}", request.ProductId);
+                return await _apiClient.PostAsync<CreateLoanApplicationRequest, LoanApplicationDto>(Endpoint, request);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error creating loan application: {Message}", ex.Message);
+                throw;
+            }
+        }
     }
 }
