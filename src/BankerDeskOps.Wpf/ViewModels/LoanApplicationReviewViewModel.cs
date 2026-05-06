@@ -324,11 +324,20 @@ namespace BankerDeskOps.Wpf.ViewModels
                     },
                     () => { /* dialog closed */ });
 
+                var mainWindow = System.Windows.Application.Current.MainWindow;
+                
+                // Only set Owner if MainWindow is available and we're not trying to set the window as its own owner
                 var window = new CreateLoanApplicationWindow
                 {
                     DataContext = viewModel,
-                    Owner = System.Windows.Application.Current.MainWindow
+                    Owner = mainWindow
                 };
+                
+                // If no valid owner, change startup location to prevent CenterOwner issues
+                if (mainWindow == null)
+                {
+                    window.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                }
 
                 window.ShowDialog();
             }
