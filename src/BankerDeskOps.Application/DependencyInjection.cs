@@ -22,6 +22,7 @@ namespace BankerDeskOps.Application
             services.AddScoped<ILoanApplicationService, LoanApplicationService>();
             services.AddScoped<IRepaymentScheduleService, RepaymentScheduleService>();
             services.AddScoped<CreateRepaymentScheduleFromApplicationService>();
+            services.AddScoped<ILoanCalculatorService, LoanCalculatorService>();
 
             return services;
         }
