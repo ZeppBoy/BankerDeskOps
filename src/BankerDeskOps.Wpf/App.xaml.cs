@@ -18,6 +18,8 @@ namespace BankerDeskOps.Wpf
     {
         private ServiceProvider? _serviceProvider;
 
+        public IServiceProvider? ServiceProvider => _serviceProvider;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -114,6 +116,7 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<LoanApplicationReviewViewModel>();
             services.AddSingleton<RepaymentScheduleViewModel>();
             services.AddTransient<LoginViewModel>();
+            services.AddTransient<CreateRepaymentScheduleViewModel>();
 
             // Add Views
             services.AddSingleton<LoansView>();
@@ -129,6 +132,7 @@ namespace BankerDeskOps.Wpf
             services.AddSingleton<LoanApplicationReviewView>();
             services.AddSingleton<RepaymentScheduleView>();
             services.AddTransient<LoginView>();
+            services.AddTransient<CreateRepaymentScheduleWindow>();
             services.AddSingleton<MainWindow>();
 
             // Add logging

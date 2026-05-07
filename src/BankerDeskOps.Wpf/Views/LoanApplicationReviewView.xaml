@@ -57,6 +57,7 @@
                 <Button Content="Delete" Command="{Binding DeleteApplicationCommand}" Height="35" Padding="15,5" Background="#6c757d" Foreground="White" Margin="0,0,5,0"/>
                 <Button Content="Upload Document" Command="{Binding UploadDocumentCommand}" Height="35" Padding="15,5" Background="#ffc107" Foreground="Black" Margin="0,0,5,0"/>
                 <Button Content="Remove Doc" Command="{Binding RemoveDocumentCommand}" Height="35" Padding="15,5" Background="#fd7e14" Foreground="White" Margin="0,0,5,0"/>
+                <Button Content="Generate Schedule" Command="{Binding OpenGenerateScheduleDialogCommand}" Height="35" Padding="15,5" Background="#6f42c1" Foreground="White" Margin="0,0,5,0"/>
                 <Button Content="Refresh" Command="{Binding LoadApplicationsCommand}" Height="35" Padding="15,5" Background="#17a2b8" Foreground="White"/>
             </StackPanel>
 

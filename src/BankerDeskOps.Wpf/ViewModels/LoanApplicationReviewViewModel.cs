@@ -1,13 +1,16 @@
 using BankerDeskOps.Application.DTOs;
+using BankerDeskOps.Application.Interfaces;
 using BankerDeskOps.Wpf.Services;
 using BankerDeskOps.Wpf.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 
 namespace BankerDeskOps.Wpf.ViewModels
@@ -475,6 +478,73 @@ namespace BankerDeskOps.Wpf.ViewModels
             NewPrincipalAmount = 0m;
             NewInterestAmount = 0m;
             NewTotalPayment = 0m;
+        }
+
+        // --- Generate Repayment Schedule Dialog ---
+
+        [RelayCommand]
+        public async Task OpenGenerateScheduleDialog()
+        {
+            if (SelectedApplication == null)
+            {
+                ErrorMessage = "Please select a loan application first.";
+                return;
+            }
+
+            if (!string.Equals(SelectedApplication.Status, "Approved", StringComparison.OrdinalIgnoreCase))
+            {
+                ErrorMessage = "Cannot generate repayment schedule for an application that is not approved.";
+                return;
+            }
+
+            try
+            {
+                ErrorMessage = null;
+
+                var mainWindow = System.Windows.Application.Current.MainWindow;
+
+                if (App.Current == null)
+                    throw new InvalidOperationException("Application instance is not available.");
+
+                var appInstance = App.Current as App;
+                if (appInstance?.ServiceProvider == null)
+                    throw new InvalidOperationException("ServiceProvider is not available.");
+
+                using var scope = ((ServiceProvider)appInstance.ServiceProvider).CreateScope();
+                var scheduleApiService = scope.ServiceProvider.GetRequiredService<RepaymentScheduleApiService>();
+                var loanCalculatorService = scope.ServiceProvider.GetRequiredService<ILoanCalculatorService>();
+                
+                var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+                var logger = loggerFactory.CreateLogger<CreateRepaymentScheduleViewModel>();
+
+                var window = new CreateRepaymentScheduleWindow
+                {
+                    DataContext = new CreateRepaymentScheduleViewModel(
+                        SelectedApplication,
+                        scheduleApiService,
+                        loanCalculatorService,
+                        logger
+                    ),
+                    Owner = mainWindow
+                };
+
+                if (mainWindow == null)
+                {
+                    window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
+
+                var result = window.ShowDialog();
+
+                if (result == true)
+                {
+                    await LoadSchedules();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error opening generate schedule dialog: {ex.Message}";
+                _logger.LogError("Failed to open generate schedule dialog: {Message}", ex.Message);
+            }
         }
 
         private Dictionary<string, List<string>> ValidateScheduleEntry()
