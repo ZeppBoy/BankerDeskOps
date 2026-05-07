@@ -73,15 +73,12 @@ namespace BankerDeskOps.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoanApplicationDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<LoanApplicationDto>> UpdateStatus(Guid id, [FromBody] object body)
+        public async Task<ActionResult<LoanApplicationDto>> UpdateStatus(Guid id, [FromBody] UpdateStatusRequest request)
         {
             try
             {
-                var status = body.GetType().GetProperty("Status")?.GetValue(body)?.ToString() ?? string.Empty;
-                var comment = body.GetType().GetProperty("Comment")?.GetValue(body)?.ToString();
-
-                _logger.LogInformation("Updating loan application {ApplicationId} status to {Status}", id, status);
-                var updated = await _applicationService.UpdateStatusAsync(id, status, comment);
+                _logger.LogInformation("Updating loan application {ApplicationId} status to {Status}", id, request.Status);
+                var updated = await _applicationService.UpdateStatusAsync(id, request.Status!, request.Comment);
                 return Ok(updated);
             }
             catch (InvalidOperationException ex)

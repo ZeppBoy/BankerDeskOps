@@ -49,7 +49,7 @@ namespace BankerDeskOps.Wpf.Services
             try
             {
                 _logger.LogInformation("Updating loan application {ApplicationId} status to {Status}", id, status);
-                await _apiClient.PutAsync<object, object>($"{Endpoint}/{id}/status", new { Status = status, Comment = comment });
+                await _apiClient.PutAsync<UpdateStatusRequest, LoanApplicationDto>($"{Endpoint}/{id}/status", new UpdateStatusRequest { Status = status, Comment = comment });
             }
             catch (Exception ex)
             {
