@@ -1,4 +1,5 @@
 using System.Windows;
+using BankerDeskOps.Wpf.ViewModels;
 
 namespace BankerDeskOps.Wpf.Views
 {
@@ -7,6 +8,11 @@ namespace BankerDeskOps.Wpf.Views
         public CreateRepaymentScheduleWindow()
         {
             InitializeComponent();
+            Loaded += async (s, e) =>
+            {
+                if (DataContext is CreateRepaymentScheduleViewModel viewModel)
+                    await viewModel.InitializeAsync();
+            };
         }
     }
 }

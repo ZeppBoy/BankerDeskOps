@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using BankerDeskOps.Application.Interfaces;
 using BankerDeskOps.Wpf.Services;
 using BankerDeskOps.Wpf.ViewModels;
 using BankerDeskOps.Wpf.Views;
@@ -69,6 +70,9 @@ namespace BankerDeskOps.Wpf
 
         private void ConfigureServices(ServiceCollection services)
         {
+            // Register client-side loan calculator (uses API services instead of DB repositories)
+            services.AddScoped<ILoanCalculatorService, ClientLoanCalculatorService>();
+
             // Add HTTP client for REST API calls
             services.AddHttpClient<ApiClient>(client =>
             {

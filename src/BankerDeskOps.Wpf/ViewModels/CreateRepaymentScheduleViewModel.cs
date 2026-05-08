@@ -1,6 +1,5 @@
 using BankerDeskOps.Application.DTOs;
 using BankerDeskOps.Application.Interfaces;
-using BankerDeskOps.Application.Services.Financial;
 using BankerDeskOps.Wpf.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -53,10 +52,14 @@ namespace BankerDeskOps.Wpf.ViewModels
 
             FirstPaymentDate = DateTime.Today.AddMonths(1);
             PaymentCount = LoanApplication.TermMonths;
-            CalculateMonthlyPayment();
         }
 
-        private void CalculateMonthlyPayment()
+        public async Task InitializeAsync()
+        {
+            await CalculateMonthlyPaymentAsync();
+        }
+
+        private async Task CalculateMonthlyPaymentAsync()
         {
             try
             {
@@ -67,7 +70,7 @@ namespace BankerDeskOps.Wpf.ViewModels
                     TermMonths = LoanApplication.TermMonths
                 };
 
-                var result = _loanCalculatorService.CalculateAsync(request).GetAwaiter().GetResult();
+                var result = await _loanCalculatorService.CalculateAsync(request);
 
                 MonthlyPayment = Math.Round(result.MonthlyPayment, 2);
                 PaymentCount = LoanApplication.TermMonths;
@@ -81,7 +84,7 @@ namespace BankerDeskOps.Wpf.ViewModels
         }
 
         [RelayCommand]
-        private void GenerateSchedule()
+        private async Task GenerateScheduleAsync()
         {
             try
             {
@@ -95,8 +98,8 @@ namespace BankerDeskOps.Wpf.ViewModels
 
                 GeneratedSchedule.Clear();
 
-                decimal monthlyRate = LoanApplication.ProductId != Guid.Empty ? 
-                    GetAnnualInterestRate() / 12m : 0m;
+                decimal monthlyRate = LoanApplication.ProductId != Guid.Empty ?
+                    await GetAnnualInterestRateAsync() / 12m : 0m;
 
                 if (monthlyRate == 0)
                 {
@@ -106,16 +109,17 @@ namespace BankerDeskOps.Wpf.ViewModels
 
                 decimal remainingBalance = LoanApplication.Amount;
                 DateTime paymentDate = FirstPaymentDate;
+                decimal currentMonthlyPayment = MonthlyPayment;
 
                 for (int i = 1; i <= PaymentCount; i++)
                 {
                     decimal interestAmount = Math.Round(remainingBalance * monthlyRate, 2);
-                    decimal principalAmount = Math.Round(MonthlyPayment - interestAmount, 2);
+                    decimal principalAmount = Math.Round(currentMonthlyPayment - interestAmount, 2);
 
                     if (i == PaymentCount)
                     {
                         principalAmount = remainingBalance;
-                        MonthlyPayment = Math.Round(principalAmount + interestAmount, 2);
+                        currentMonthlyPayment = Math.Round(principalAmount + interestAmount, 2);
                     }
 
                     var scheduleEntry = new RepaymentScheduleDto
@@ -126,7 +130,7 @@ namespace BankerDeskOps.Wpf.ViewModels
                         DueDate = paymentDate,
                         PrincipalAmount = principalAmount,
                         InterestAmount = interestAmount,
-                        TotalPayment = Math.Round(MonthlyPayment, 2)
+                        TotalPayment = Math.Round(currentMonthlyPayment, 2)
                     };
 
                     GeneratedSchedule.Add(scheduleEntry);
@@ -135,7 +139,7 @@ namespace BankerDeskOps.Wpf.ViewModels
                     paymentDate = paymentDate.AddMonths(1);
                 }
 
-                _logger.LogInformation("Generated repayment schedule for application {AppId} with {Count} payments", 
+                _logger.LogInformation("Generated repayment schedule for application {AppId} with {Count} payments",
                     LoanApplication.Id, PaymentCount);
             }
             catch (Exception ex)
@@ -174,9 +178,9 @@ namespace BankerDeskOps.Wpf.ViewModels
                     await _scheduleApiService.CreateScheduleAsync(request);
                 }
 
-                _logger.LogInformation("Created {Count} schedule entries for application {AppId}", 
+                _logger.LogInformation("Created {Count} schedule entries for application {AppId}",
                     GeneratedSchedule.Count, LoanApplication.Id);
-                
+
                 ErrorMessage = $"Schedule with {GeneratedSchedule.Count} entries created successfully.";
             }
             catch (Exception ex)
@@ -196,7 +200,7 @@ namespace BankerDeskOps.Wpf.ViewModels
             ErrorMessage = null;
         }
 
-        private decimal GetAnnualInterestRate()
+        private async Task<decimal> GetAnnualInterestRateAsync()
         {
             try
             {
@@ -207,7 +211,7 @@ namespace BankerDeskOps.Wpf.ViewModels
                     TermMonths = LoanApplication.TermMonths
                 };
 
-                var result = _loanCalculatorService.CalculateAsync(request).GetAwaiter().GetResult();
+                var result = await _loanCalculatorService.CalculateAsync(request);
                 return result.InterestRate;
             }
             catch (Exception ex)
