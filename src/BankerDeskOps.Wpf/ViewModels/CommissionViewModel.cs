@@ -104,10 +104,10 @@ namespace BankerDeskOps.Wpf.ViewModels
         [RelayCommand]
         public async Task SaveCommission()
         {
-            var validationErrors = ValidateCommission();
-            if (validationErrors.Count > 0)
+            var errors = ValidateCommission();
+            if (errors.Count > 0)
             {
-                ErrorMessage = string.Join("; ", validationErrors.SelectMany(e => e.Value));
+                ErrorMessage = string.Join("; ", errors.SelectMany(e => e.Value));
                 return;
             }
 
@@ -226,27 +226,27 @@ namespace BankerDeskOps.Wpf.ViewModels
 
         private Dictionary<string, List<string>> ValidateCommission()
         {
-            var errors = new Dictionary<string, List<string>>();
+            var validationErrors = new Dictionary<string, List<string>>();
 
             if (string.IsNullOrWhiteSpace(Name))
-                errors["Name"] = new List<string> { "Commission name is required." };
+                validationErrors["Name"] = new List<string> { "Commission name is required." };
 
             if (Percentage < 0)
-                errors["Percentage"] = new List<string> { "Percentage cannot be negative." };
+                validationErrors["Percentage"] = new List<string> { "Percentage cannot be negative." };
 
             if (Percentage > 100)
-                errors["Percentage"] = new List<string> { "Percentage cannot exceed 100%." };
+                validationErrors["Percentage"] = new List<string> { "Percentage cannot exceed 100%." };
 
-            _errors = errors;
+            _errors = validationErrors;
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
-            return errors;
+            return validationErrors;
         }
 
         public System.Collections.IEnumerable GetErrors(string? propertyName)
         {
-            if (propertyName == null || !_errors.TryGetValue(propertyName, out var errors))
+            if (propertyName == null || !_errors.TryGetValue(propertyName, out var errorList))
                 return Enumerable.Empty<string>();
-            return errors;
+            return errorList;
         }
 
         private void ClearForm()
