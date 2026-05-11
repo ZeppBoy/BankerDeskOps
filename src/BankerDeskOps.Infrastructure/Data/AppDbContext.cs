@@ -1,5 +1,7 @@
 using BankerDeskOps.Domain.Entities;
 using BankerDeskOps.Infrastructure.Configurations;
+using BankerDeskOps.Infrastructure.Jobs;
+using BankerDeskOps.Infrastructure.Outbox;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankerDeskOps.Infrastructure.Data
@@ -88,6 +90,16 @@ namespace BankerDeskOps.Infrastructure.Data
         public DbSet<RepaymentSchedule> RepaymentSchedules { get; set; } = null!;
 
         /// <summary>
+        /// DbSet for JobExecution tracking rows.
+        /// </summary>
+        public DbSet<JobExecution> JobExecutions { get; set; } = null!;
+
+        /// <summary>
+        /// DbSet for transactional outbox messages.
+        /// </summary>
+        public DbSet<OutboxMessage> OutboxMessages { get; set; } = null!;
+
+        /// <summary>
         /// Configures the model by applying entity configurations.
         /// </summary>
         /// <param name="modelBuilder">The model builder.</param>
@@ -110,6 +122,8 @@ namespace BankerDeskOps.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new CommissionConfiguration());
             modelBuilder.ApplyConfiguration(new LoanApplicationConfiguration());
             modelBuilder.ApplyConfiguration(new RepaymentScheduleConfiguration());
+            modelBuilder.ApplyConfiguration(new JobExecutionConfiguration());
+            modelBuilder.ApplyConfiguration(new OutboxMessageConfiguration());
         }
     }
 }

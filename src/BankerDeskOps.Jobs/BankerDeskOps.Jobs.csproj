@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>BankerDeskOps.Jobs</RootNamespace>
+    <AssemblyName>BankerDeskOps.Jobs</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.*" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.*" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BankerDeskOps.Application\BankerDeskOps.Application.csproj" />
+    <ProjectReference Include="..\BankerDeskOps.Infrastructure\BankerDeskOps.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
