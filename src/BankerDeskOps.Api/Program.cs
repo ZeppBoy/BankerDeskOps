@@ -1,3 +1,4 @@
+using BankerDeskOps.Api.Hangfire;
 using BankerDeskOps.Api.Middleware;
 using BankerDeskOps.Api.Services;
 using BankerDeskOps.Application;
@@ -7,6 +8,8 @@ using BankerDeskOps.Domain.Entities;
 using BankerDeskOps.Domain.Enums;
 using BankerDeskOps.Infrastructure;
 using BankerDeskOps.Infrastructure.Data;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,18 @@ builder.Services.AddGrpc();
 
 // Add infrastructure services
 builder.Services.AddInfrastructure(connectionString);
+
+// Add Hangfire (read-only dashboard — the Jobs worker processes the jobs)
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+    {
+        SchemaName = "hangfire",
+        UseRecommendedIsolationLevel = true,
+        DisableGlobalLocks = true
+    }));
 
 // Add application services
 builder.Services.AddApplication();
@@ -128,6 +143,13 @@ app.MapGrpcService<TransactionServiceImpl>();
 
 // Map REST controllers (kept for backward compatibility)
 app.MapControllers();
+
+// Hangfire dashboard — accessible at /jobs, restricted to localhost or X-Admin-Key header
+app.MapHangfireDashboard("/jobs", new DashboardOptions
+{
+    Authorization = [new LocalOrAdminDashboardFilter()],
+    DashboardTitle = "BankerDeskOps — Job Dashboard"
+});
 
 app.Run();
 

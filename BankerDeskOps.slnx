@@ -7,9 +7,11 @@
     <Project Path="src/BankerDeskOps.Wpf/BankerDeskOps.Wpf.csproj" />
     <Project Path="src/BankerDeskOps.Avalonia/BankerDeskOps.Avalonia.csproj" />
     <Project Path="src/BankerDeskOps.Web/BankerDeskOps.Web.csproj" />
+    <Project Path="src/BankerDeskOps.Jobs/BankerDeskOps.Jobs.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/BankerDeskOps.Api.Tests/BankerDeskOps.Api.Tests.csproj" />
     <Project Path="tests/BankerDeskOps.Application.Tests/BankerDeskOps.Application.Tests.csproj" />
+    <Project Path="tests/BankerDeskOps.Jobs.Tests/BankerDeskOps.Jobs.Tests.csproj" />
   </Folder>
 </Solution>

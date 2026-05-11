@@ -1,5 +1,7 @@
 using BankerDeskOps.Application.Interfaces;
+using BankerDeskOps.Application.Jobs;
 using BankerDeskOps.Infrastructure.Data;
+using BankerDeskOps.Infrastructure.Jobs;
 using BankerDeskOps.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +49,8 @@ namespace BankerDeskOps.Infrastructure
             services.AddScoped<ICommissionRepository, CommissionRepository>();
             services.AddScoped<ILoanApplicationRepository, LoanApplicationRepository>();
             services.AddScoped<IRepaymentScheduleRepository, RepaymentScheduleRepository>();
+            services.AddScoped<IJobExecutionStore, SqlJobExecutionStore>();
+            services.AddSingleton<IBusinessDateProvider, SystemBusinessDateProvider>();
 
             return services;
         }
