@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\BankerDeskOps.Application\BankerDeskOps.Application.csproj" />
     <ProjectReference Include="..\..\src\BankerDeskOps.Infrastructure\BankerDeskOps.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\BankerDeskOps.Jobs\BankerDeskOps.Jobs.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using BankerDeskOps.Application;
 using BankerDeskOps.Infrastructure;
+using BankerDeskOps.Jobs.Outbox;
 using Hangfire;
 using Hangfire.SqlServer;
 
@@ -32,4 +33,11 @@ builder.Services.AddHangfireServer(options =>
 });
 
 var host = builder.Build();
+
+using (var scope = host.Services.CreateScope())
+{
+    var recurringJobs = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+    OutboxDispatcherJob.RegisterRecurring(recurringJobs);
+}
+
 host.Run();
