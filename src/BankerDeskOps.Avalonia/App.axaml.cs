@@ -60,11 +60,24 @@ public partial class App : global::Avalonia.Application
         // Session context
         services.AddSingleton<SessionContext>();
 
+        // HTTP client for REST API calls
+        services.AddHttpClient<ApiClient>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:7003");
+        });
+
         // gRPC API services
         services.AddScoped<GrpcLoanApiService>();
         services.AddScoped<GrpcRetailAccountApiService>();
         services.AddScoped<GrpcBankClientApiService>();
         services.AddScoped<GrpcUserApiService>();
+
+        // REST API services for configuration management
+        services.AddScoped<CurrencyApiService>();
+        services.AddScoped<ProductApiService>();
+        services.AddScoped<RateApiService>();
+        services.AddScoped<FeeApiService>();
+        services.AddScoped<CommissionApiService>();
 
         // ViewModels
         services.AddSingleton<MainViewModel>();
@@ -72,6 +85,11 @@ public partial class App : global::Avalonia.Application
         services.AddSingleton<RetailAccountsViewModel>();
         services.AddSingleton<BankClientsViewModel>();
         services.AddSingleton<UsersViewModel>();
+        services.AddSingleton<CurrencyViewModel>();
+        services.AddSingleton<ProductViewModel>();
+        services.AddSingleton<RateViewModel>();
+        services.AddSingleton<FeeViewModel>();
+        services.AddSingleton<CommissionViewModel>();
         services.AddTransient<LoginViewModel>();
 
         // Views

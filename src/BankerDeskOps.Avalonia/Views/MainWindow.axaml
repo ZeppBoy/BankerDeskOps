@@ -21,6 +21,21 @@
         <DataTemplate DataType="{x:Type viewmodels:UsersViewModel}">
             <views:UsersView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:CurrencyViewModel}">
+            <views:CurrencyView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:ProductViewModel}">
+            <views:ProductView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:RateViewModel}">
+            <views:RateView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:FeeViewModel}">
+            <views:FeeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:CommissionViewModel}">
+            <views:CommissionView/>
+        </DataTemplate>
     </Window.DataTemplates>
 
     <Grid>
@@ -52,6 +67,33 @@
                         Height="40" Margin="0,5"
                         Command="{Binding NavigateToUsersCommand}"
                         Background="#6f42c1" Foreground="White"
+                        HorizontalAlignment="Stretch"/>
+
+                <TextBlock Text="Configuration" FontSize="13" FontWeight="SemiBold" Margin="0,15,0,5" Foreground="#555"/>
+                <Button Content="Currencies"
+                        Height="40" Margin="0,5"
+                        Command="{Binding NavigateToCurrenciesCommand}"
+                        Background="#28a745" Foreground="White"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Products"
+                        Height="40" Margin="0,5"
+                        Command="{Binding NavigateToProductsCommand}"
+                        Background="#28a745" Foreground="White"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Rates"
+                        Height="40" Margin="0,5"
+                        Command="{Binding NavigateToRatesCommand}"
+                        Background="#28a745" Foreground="White"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Fees"
+                        Height="40" Margin="0,5"
+                        Command="{Binding NavigateToFeesCommand}"
+                        Background="#28a745" Foreground="White"
+                        HorizontalAlignment="Stretch"/>
+                <Button Content="Commissions"
+                        Height="40" Margin="0,5"
+                        Command="{Binding NavigateToCommissionsCommand}"
+                        Background="#28a745" Foreground="White"
                         HorizontalAlignment="Stretch"/>
             </StackPanel>
         </Border>

@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="BankerDeskOps.Avalonia.Views.RateView">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="Rates Management" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Rate Form -->
+        <Border Grid.Row="1" Background="#f9f9f9" BorderBrush="#dee2e6" BorderThickness="1" Padding="10" Margin="0,0,0,8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Row 1: ProductId -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Product ID:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Column="1" Text="{Binding ProductId}" Padding="5"/>
+                </Grid>
+
+                <!-- Row 2: MinAmount / MaxAmount -->
+                <Grid Grid.Row="1" Margin="0,6,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Min Amount:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Column="1" Text="{Binding MinAmount}" Padding="5" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="2" Text="Max Amount:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Column="3" Text="{Binding MaxAmount}" Padding="5"/>
+                </Grid>
+
+                <!-- Row 3: MinTermMonths / MaxTermMonths / RateValue -->
+                <Grid Grid.Row="2" Margin="0,6,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Min Term:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Column="1" Text="{Binding MinTermMonths}" Padding="5" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="2" Text="Max Term:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Column="3" Text="{Binding MaxTermMonths}" Padding="5" Margin="0,0,10,0"/>
+
+                    <TextBlock Grid.Column="4" Text="Rate %:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox   Grid.Column="5" Text="{Binding RateValue}" Padding="5"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Save"         Command="{Binding SaveRateCommand}"
+                    Height="35" Padding="15,5" Background="#28a745" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Edit Selected"  Command="{Binding EditRateCommand}"
+                    Height="35" Padding="15,5" Background="#007acc" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Delete"       Command="{Binding DeleteRateCommand}"
+                    Height="35" Padding="15,5" Background="#dc3545" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Cancel"       Command="{Binding CancelEditCommand}"
+                    Height="35" Padding="15,5" Background="#6c757d" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Load All"     Command="{Binding LoadRatesCommand}"
+                    Height="35" Padding="15,5" Background="#17a2b8" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="By Product"   Command="{Binding LoadRatesByProductCommand}"
+                    Height="35" Padding="15,5" Background="#fd7e14" Foreground="White"/>
+        </StackPanel>
+
+        <!-- Rates DataGrid -->
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding Rates}"
+                  SelectedItem="{Binding SelectedRate}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"           Binding="{Binding Id}"             Width="220"/>
+                <DataGridTextColumn Header="Product ID"   Binding="{Binding ProductId}"      Width="220"/>
+                <DataGridTextColumn Header="Min Amount"   Binding="{Binding MinAmount}"      Width="110"/>
+                <DataGridTextColumn Header="Max Amount"   Binding="{Binding MaxAmount}"      Width="110"/>
+                <DataGridTextColumn Header="Min Term"     Binding="{Binding MinTermMonths}"  Width="90"/>
+                <DataGridTextColumn Header="Max Term"     Binding="{Binding MaxTermMonths}"  Width="90"/>
+                <DataGridTextColumn Header="Rate %"       Binding="{Binding RateValue}"      Width="90"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Status / Error Message -->
+        <TextBlock Grid.Row="4"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="#dc3545"
+                   Margin="0,8,0,0"
+                   TextWrapping="Wrap"/>
+    </Grid>
+</UserControl>
